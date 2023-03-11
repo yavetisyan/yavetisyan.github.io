@@ -19,10 +19,10 @@ import { signOut } from "firebase/auth";
 import { makeStyles } from "@mui/styles";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import { auth } from "firebase";
 import AdminContext from "context/AdminContext";
 import { useState } from "react";
 import CategoriesContext from "context/CategoriesContext";
+import {auth} from "../../../firebase";
 
 const useStyles = makeStyles({
   button: {

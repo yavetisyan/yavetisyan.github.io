@@ -3,7 +3,7 @@ import { Box, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
-import db from "../../firebase";
+import {db} from "../../firebase";
 
 const useStyle = makeStyles({
   brandBox: {

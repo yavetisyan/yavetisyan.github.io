@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, {useCallback, useContext, useState} from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
@@ -6,20 +6,20 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
 import FormControl from "@mui/material/FormControl";
-import { Container, TextareaAutosize } from "@mui/material";
-import { collection, doc, getDocs, updateDoc } from "@firebase/firestore";
-import db from "../../firebase";
+import {Container, TextareaAutosize} from "@mui/material";
+import {collection, doc, getDocs, updateDoc} from "@firebase/firestore";
+import {db} from "../../firebase";
 import ProductsContext from "context/ProductsContext";
 
-const EditItemDialog = ({ item, onClose }) => {
+
+const EditItemDialog = ({item, onClose}) => {
   const listCategories = [
-    { categories: "Boys" },
-    { categories: "Girls" },
-    { categories: "Accessories" },
+    {categories: "Boys"},
+    {categories: "Girls"},
+    {categories: "Accessories"},
   ];
-  const { setProducts } = useContext(ProductsContext);
+  const {setProducts} = useContext(ProductsContext);
   const [categories, setCategories] = useState(
     listCategories.find((c) => c.categories === item.categories)?.categories
   );
@@ -114,7 +114,7 @@ const EditItemDialog = ({ item, onClose }) => {
             onChange={(e) => setPrice(e.target.value)}
           />
 
-          <FormControl sx={{ m: 1, minWidth: 215 }}>
+          <FormControl sx={{m: 1, minWidth: 215}}>
             <InputLabel id="demo-controlled-open-select-label">
               Enter Categories
             </InputLabel>

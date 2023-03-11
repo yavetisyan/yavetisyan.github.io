@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -6,22 +6,22 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { styled } from "@mui/material/styles";
+import {styled} from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Stack from "@mui/material/Stack";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { DataGrid } from "@mui/x-data-grid";
-import { collection, getDocs, onSnapshot, addDoc } from "@firebase/firestore";
-import { storage } from "../../firebase";
-import db from "../../firebase";
+import {DataGrid} from "@mui/x-data-grid";
+import {addDoc, collection, getDocs, onSnapshot} from "@firebase/firestore";
+import {db, storage} from "../../firebase";
 import ProductsContext from "context/ProductsContext";
 import AdminContext from "context/AdminContext";
-import { Container, TextareaAutosize } from "@mui/material";
+import {Container, TextareaAutosize} from "@mui/material";
 import EditItemDialog from "./EditItemDialog";
 import DeletIetemDialog from "./DeleteItemDialog";
 import AddBrand from "./AddBrand";
-import { makeStyles } from "@mui/styles";
+import {makeStyles} from "@mui/styles";
+
 
 const useStyle = makeStyles({
   addForm: {
@@ -57,8 +57,8 @@ const useStyle = makeStyles({
 const Admin = () => {
   const classes = useStyle(0);
   let formId = 1;
-  const { imageUrl, setImageUrl } = useContext(AdminContext);
-  const { products, setProducts, sliderUrl, setSliderUrl } =
+  const {imageUrl, setImageUrl} = useContext(AdminContext);
+  const {products, setProducts} =
     useContext(ProductsContext);
 
   const [editingRow, setEditingRow] = useState(null);
@@ -78,7 +78,7 @@ const Admin = () => {
   const [itemName, setItemName] = useState("");
   const [error, setError] = useState("");
 
-  const [progress, setProgress] = useState(0);
+  const [setProgress] = useState(0);
 
   const type = ["image/png", "image/jpeg"];
   const Input = styled("input")({
@@ -86,9 +86,9 @@ const Admin = () => {
   });
 
   const categoriesList = [
-    { categories: "Boys" },
-    { categories: "Girls" },
-    { categories: "Accessories" },
+    {categories: "Boys"},
+    {categories: "Girls"},
+    {categories: "Accessories"},
   ];
 
   useEffect(() => {
@@ -278,12 +278,12 @@ const Admin = () => {
 
   return (
     <Container maxWidth="lg" className="sectionContainer">
-      <AddBrand />
+      <AddBrand/>
 
       <Box
         component="form"
         sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
+          "& .MuiTextField-root": {m: 1, width: "25ch"},
         }}
         noValidate
         autoComplete="off"
@@ -293,7 +293,7 @@ const Admin = () => {
 
           <div className={classes.addItems}>
             {/*add brand name*/}
-            <FormControl sx={{ m: 1, minWidth: 215 }}>
+            <FormControl sx={{m: 1, minWidth: 215}}>
               <InputLabel id="demo-controlled-open-select-label">
                 Brand name
               </InputLabel>
@@ -342,7 +342,7 @@ const Admin = () => {
             />
 
             {/*add categories*/}
-            <FormControl sx={{ m: 1, minWidth: 215 }}>
+            <FormControl sx={{m: 1, minWidth: 215}}>
               <InputLabel>Categories</InputLabel>
               <Select
                 open={openC}
@@ -406,13 +406,13 @@ const Admin = () => {
                     aria-label="upload picture"
                     component="span"
                   >
-                    <PhotoCamera sx={{ fontSize: 40 }} />
-                    <div style={{ marginLeft: 20 }}>
-                      {productImg && <CheckCircleIcon />}
+                    <PhotoCamera sx={{fontSize: 40}}/>
+                    <div style={{marginLeft: 20}}>
+                      {productImg && <CheckCircleIcon/>}
                     </div>
                   </IconButton>
                   {error && (
-                    <span style={{ marginLeft: 30, color: "red" }}>
+                    <span style={{marginLeft: 30, color: "red"}}>
                       {error}
                     </span>
                   )}
@@ -442,13 +442,13 @@ const Admin = () => {
                     aria-label="upload picture"
                     component="span"
                   >
-                    <PhotoCamera sx={{ fontSize: 40 }} />
-                    <div style={{ marginLeft: 20 }}>
-                      {sliderImg && <CheckCircleIcon />}
+                    <PhotoCamera sx={{fontSize: 40}}/>
+                    <div style={{marginLeft: 20}}>
+                      {sliderImg && <CheckCircleIcon/>}
                     </div>
                   </IconButton>
                   {error && (
-                    <span style={{ marginLeft: 30, color: "red" }}>
+                    <span style={{marginLeft: 30, color: "red"}}>
                       {error}
                     </span>
                   )}
@@ -478,12 +478,12 @@ const Admin = () => {
           Add product
         </Button>
       </div>
-      <div style={{ height: 500, width: "100%", margin: "20px" }}>
+      <div style={{height: 500, width: "100%", margin: "20px"}}>
         <DataGrid
           onGridStateChange={console.log}
-          sx={{ maxWidth: "100%" }}
+          sx={{maxWidth: "100%"}}
           columns={[
-            { field: "formId", headerName: "ID" },
+            {field: "formId", headerName: "ID"},
             {
               field: "ProductImage",
               headerName: "Image URL",
@@ -492,19 +492,19 @@ const Admin = () => {
                 <img
                   src={params.value}
                   alt="Pic"
-                  style={{ width: 80, height: 50, objectFit: "cover" }}
+                  style={{width: 80, height: 50, objectFit: "cover"}}
                 />
               ),
             },
-            { field: "brandName", headerName: "Brand Name" },
-            { field: "categories", headerName: "Categories" },
+            {field: "brandName", headerName: "Brand Name"},
+            {field: "categories", headerName: "Categories"},
             {
               field: "itemName",
               headerName: "Name",
               editable: true,
             },
-            { field: "price", headerName: "Price" },
-            { field: "description", headerName: "Description", width: 300 },
+            {field: "price", headerName: "Price"},
+            {field: "description", headerName: "Description", width: 300},
             {
               field: "Edit",
               width: 100,
@@ -528,17 +528,17 @@ const Admin = () => {
               },
             },
           ]}
-          
+
           rows={products.map(
             ({
-              id,
-              brandName,
-              price,
-              description,
-              ProductImage,
-              itemName,
-              categories,
-            }) => ({
+               id,
+               brandName,
+               price,
+               description,
+               ProductImage,
+               itemName,
+               categories,
+             }) => ({
               id,
               formId: formId++,
               categories,
@@ -553,11 +553,11 @@ const Admin = () => {
       </div>
 
       {editingRow && (
-        <EditItemDialog item={editingRow} onClose={() => setEditingRow(null)} />
+        <EditItemDialog item={editingRow} onClose={() => setEditingRow(null)}/>
       )}
 
       {deleteRow && (
-        <DeletIetemDialog item={deleteRow} onClose={() => setDeleteRow(null)} />
+        <DeletIetemDialog item={deleteRow} onClose={() => setDeleteRow(null)}/>
       )}
     </Container>
   );

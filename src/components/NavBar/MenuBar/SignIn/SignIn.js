@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,31 +8,15 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { NavLink } from "react-router-dom";
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
-import { auth } from "firebase";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUserCart } from "store/slices/userSlices";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "@firebase/firestore";
-import db from "../../../../firebase";
-import { useEffect } from "react";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {NavLink, useNavigate} from "react-router-dom";
+import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup,} from "firebase/auth";
+import {useDispatch} from "react-redux";
+import {setUserCart} from "store/slices/userSlices";
+import {addDoc, collection, doc, getDoc, getDocs, query, setDoc, where,} from "@firebase/firestore";
 import ScrollToTop from "components/pages/ScrollToTop";
-import { makeStyles } from "@mui/styles";
+import {makeStyles} from "@mui/styles";
+import {auth, db} from "../../../../firebase";
 
 const useStyle = makeStyles({
   box: {
@@ -153,13 +137,13 @@ export default function SignIn() {
     <ThemeProvider theme={theme}>
       <div className="sectionContainer signUpTitle">
         <Container component="main" maxWidth="xs">
-          <CssBaseline />
+          <CssBaseline/>
           <Box className={classes.box}>
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
+            <Avatar sx={{m: 1, bgcolor: "secondary.main"}}></Avatar>
             <Typography component="h1" variant="h5">
               Login
             </Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }}>
+            <Box component="form" noValidate sx={{mt: 1}}>
               {!error ? (
                 <>
                   <TextField
@@ -192,7 +176,6 @@ export default function SignIn() {
                     margin="normal"
                     required
                     fullWidth
-                    id="outlined-error-helper-text"
                     id="email"
                     label="Email Address"
                     name="email"
@@ -216,7 +199,7 @@ export default function SignIn() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{mt: 3, mb: 2}}
                 onClick={loginWithEmail}
               >
                 Sign In
@@ -226,7 +209,7 @@ export default function SignIn() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mb: 2, backgroundColor: "#e91e63" }}
+                sx={{mb: 2, backgroundColor: "#e91e63"}}
                 onClick={loginWithGoogle}
               >
                 Sign In with GOOGLE
@@ -243,7 +226,7 @@ export default function SignIn() {
               </Grid>
             </Box>
           </Box>
-          <ScrollToTop />
+          <ScrollToTop/>
         </Container>
       </div>
     </ThemeProvider>

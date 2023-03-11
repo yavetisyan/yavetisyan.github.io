@@ -1,24 +1,21 @@
-import { createContext } from "react";
-import firebase from "firebase/compat/app";
-
-import "firebase/compat/firestore";
-import "firebase/compat/auth";
-import "firebase/compat/storage";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDv7TAfBk8ceIhq0qwcrxBG5LKsh7q3VUg",
-  authDomain: "shop-project-422d3.firebaseapp.com",
-  projectId: "shop-project-422d3",
-  storageBucket: "shop-project-422d3.appspot.com",
-  messagingSenderId: "554597878948",
-  appId: "1:554597878948:web:a6510aff272f4371c7aa31",
+  apiKey: "AIzaSyCKFuFuy7Dc_KzTkpBDsQEaZ1rCXGfV58w",
+  authDomain: "online-shop-6cbb8.firebaseapp.com",
+  projectId: "online-shop-6cbb8",
+  storageBucket: "online-shop-6cbb8.appspot.com",
+  messagingSenderId: "265913380615",
+  appId: "1:265913380615:web:d87f123ff4d717857ddfa2",
+  measurementId: "G-SJJDHBM7F1",
 };
 
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 
-export const Context = createContext(null);
-const storage = firebase.storage();
-const auth = firebase.auth();
-const db = firebase.firestore();
+export const storage = getStorage(app);
+export const db = getFirestore(app);
 
-export { storage, auth, db as default };

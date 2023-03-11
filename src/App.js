@@ -1,20 +1,17 @@
 //import logo from "./logo.svg";
-import React, { useEffect } from "react";
+import React, {useCallback, useContext, useEffect} from "react";
 import "./App.css";
 import Main from "./components/Maket/Main";
-import { onAuthStateChanged } from "firebase/auth";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUserId, setUser, setUserCart } from "./store/slices/userSlices";
-import { auth } from "firebase";
-import { useContext } from "react";
+import {onAuthStateChanged} from "firebase/auth";
+import {useDispatch, useSelector} from "react-redux";
+import {selectUserId, setUser, setUserCart} from "./store/slices/userSlices";
+import {auth, db} from "./firebase";
 import AdminContext from "context/AdminContext";
-import { useCallback } from "react";
-import db from "./firebase";
-import { collection, getDocs, query, where } from "@firebase/firestore";
+import {collection, getDocs, query, where} from "@firebase/firestore";
 
 function App() {
   const dispatch = useDispatch();
-  const { setGoogleProfileImg } = useContext(AdminContext);
+  const {setGoogleProfileImg} = useContext(AdminContext);
   const userId = useSelector(selectUserId);
 
   useEffect(() => {
@@ -40,7 +37,7 @@ function App() {
 
       if (data.docs[0]) {
         dispatch(
-          setUserCart({ ...data.docs[0].data(), id: data.docs[0].data(0).uid })
+          setUserCart({...data.docs[0].data(), id: data.docs[0].data(0).uid})
         );
       }
     },
@@ -53,7 +50,7 @@ function App() {
     }
   }, [userId, getUserCart]);
 
-  return <Main />;
+  return <Main/>;
 }
 
 export default App;

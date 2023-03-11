@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import React, { useCallback, useContext } from "react";
-import db from "../../firebase";
+import {db} from "../../firebase";
 
 import { makeStyles } from "@mui/styles";
 import ProductsContext from "context/ProductsContext";

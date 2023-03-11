@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 
-import db from "../../firebase";
+import {db} from "../../firebase";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -23,7 +23,7 @@ function Cart() {
   const userId = useSelector(selectUserId);
   const [cartItems, setCartItems] = useState([]);
   const dispatch = useDispatch();
-  const items = useSelector(selectUserCartUniqueItems) || [];
+  const items = useSelector(selectUserCartUniqueItems) || [];{}
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {

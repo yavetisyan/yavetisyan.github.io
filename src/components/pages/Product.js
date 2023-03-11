@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import db from "../../firebase";
+import { db } from "../../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserId, setUserCart } from "store/slices/userSlices";
 import {

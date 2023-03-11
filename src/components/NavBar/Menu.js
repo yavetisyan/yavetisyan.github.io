@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import {  Route, Routes } from "react-router-dom";
 import { Home } from "../Maket/Home";
 import SignIn from "./MenuBar/SignIn/SignIn";
 import SignUp from "./MenuBar/SignUp/SignUp";
@@ -15,8 +15,8 @@ import { selectUserId } from "store/slices/userSlices";
 import { useSelector } from "react-redux";
 import ContactUs from "components/pages/ContactUs";
 import { collection, getDocs } from "@firebase/firestore";
-import { storage } from "firebase";
-import db from "../../firebase";
+import { db, storage } from "../../firebase";
+
 
 function Navbar() {
   const { setProducts, setSliderUrl } = useContext(ProductsContext);
@@ -33,6 +33,7 @@ function Navbar() {
           cart: false,
           ref: doc.ref,
         };
+
         productArray.push(obj);
       });
       setProducts(productArray);
@@ -72,7 +73,7 @@ function Navbar() {
         <Route path="/girls" element={<ForGirls />} />
         <Route path="/accessories" element={<ForAccessories />} />
         <Route path="/contactus" element={<ContactUs />} />
-        {userId === "dJ2ymqhFJ2NfdKOzlagIYet1EF32" && (
+        {userId === "1Hxk22s9WCc0MSOmbOqI3lPYKzE2" && (
           <Route path="/Admin" element={<Admin />} />
         )}
         {userId && <Route path="/Cart" element={<Cart />} />}

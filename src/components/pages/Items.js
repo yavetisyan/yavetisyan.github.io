@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import db from "../../firebase";
+import {db} from "../../firebase";
 import {
   arrayUnion,
   collection,

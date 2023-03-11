@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
-import { auth, storage, Context } from "./firebase";
-import db from "./firebase";
+import {BrowserRouter} from "react-router-dom";
+
 import AdminContext from "context/AdminContext";
 import ProductsContext from "context/ProductsContext";
 import CategoriesContext from "context/CategoriesContext";
-import { store } from "store/indexStore";
-import { Provider } from "react-redux";
+import {store} from "store/indexStore";
+import {Provider} from "react-redux";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -28,57 +27,49 @@ function Products() {
 
   return (
     <React.StrictMode>
-      <Context.Provider
+      <ProductsContext.Provider
         value={{
-          db,
-          auth,
-          storage,
+          products,
+          setProducts,
+          itemPrice,
+          setItemPrice,
+          itemDescription,
+          setItemDescr,
+          itemImage,
+          setItemImage,
+          addItem,
+          setAddItem,
+          cart,
+          setCart,
+          prodItem,
+          setProdItem,
+          sliderUrl,
+          setSliderUrl,
         }}
       >
-        <ProductsContext.Provider
-          value={{
-            products,
-            setProducts,
-            itemPrice,
-            setItemPrice,
-            itemDescription,
-            setItemDescr,
-            itemImage,
-            setItemImage,
-            addItem,
-            setAddItem,
-            cart,
-            setCart,
-            prodItem,
-            setProdItem,
-            sliderUrl,
-            setSliderUrl,
-          }}
-        >
-          <CategoriesContext.Provider value={{ getCatName, setGetCatName }}>
-            <AdminContext.Provider
-              value={{
-                imageUrl,
-                setImageUrl,
-                googleProfileImg,
-                setGoogleProfileImg,
-                filteredItems,
-                setFilteredItems,
-              }}
-            >
-              <BrowserRouter>
-                <Provider store={store}>
-                  <App />
-                </Provider>
-              </BrowserRouter>
-            </AdminContext.Provider>
-          </CategoriesContext.Provider>
-        </ProductsContext.Provider>
-      </Context.Provider>
+        <CategoriesContext.Provider value={{getCatName, setGetCatName}}>
+          <AdminContext.Provider
+            value={{
+              imageUrl,
+              setImageUrl,
+              googleProfileImg,
+              setGoogleProfileImg,
+              filteredItems,
+              setFilteredItems,
+            }}
+          >
+            <BrowserRouter>
+              <Provider store={store}>
+                <App/>
+              </Provider>
+            </BrowserRouter>
+          </AdminContext.Provider>
+        </CategoriesContext.Provider>
+      </ProductsContext.Provider>
     </React.StrictMode>
   );
 }
 
-ReactDOM.render(<Products />, document.getElementById("root"));
+ReactDOM.render(<Products/>, document.getElementById("root"));
 
 reportWebVitals();

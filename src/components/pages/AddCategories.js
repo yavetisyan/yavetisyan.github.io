@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import Pagination from "@mui/material/Pagination";
-import db from "../../firebase";
+import {db} from "../../firebase";
 import { collection, query, onSnapshot, where } from "@firebase/firestore";
 import ProductsContext from "context/ProductsContext";
 import AddToCard from "./AddToCard";
