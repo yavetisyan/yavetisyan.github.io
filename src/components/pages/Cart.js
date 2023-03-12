@@ -1,29 +1,17 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 
 import {db} from "../../firebase";
-import { Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setUserCart,
-  selectUserCartUniqueItems,
-} from "../../store/slices/userSlices";
-import { selectUserId } from "../../store/slices/userSlices";
-import {
-  arrayRemove,
-  collection,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "@firebase/firestore";
+import {Button} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {selectUserCartUniqueItems, selectUserId, setUserCart,} from "../../store/slices/userSlices";
+import {arrayRemove, collection, getDoc, getDocs, query, updateDoc, where,} from "@firebase/firestore";
 import CartPayment from "./CartPayment";
 
 function Cart() {
   const userId = useSelector(selectUserId);
   const [cartItems, setCartItems] = useState([]);
   const dispatch = useDispatch();
-  const items = useSelector(selectUserCartUniqueItems) || [];{}
+  const items = useSelector(selectUserCartUniqueItems) || [];
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -39,7 +27,7 @@ function Cart() {
       const cI = await Promise.all(items.map((i) => getDoc(i.item)));
       setCartItems(
         cI.map((i, ind) => ({
-          item: { ...i.data(), ref: i.ref },
+          item: {...i.data(), ref: i.ref},
           count: items[ind].count,
         }))
       );
@@ -59,7 +47,7 @@ function Cart() {
     const data = await getDocs(q);
     let ref = data.docs[0].ref;
 
-    await updateDoc(ref, { items: arrayRemove(itemRef) });
+    await updateDoc(ref, {items: arrayRemove(itemRef)});
     const newData = await getDocs(q);
 
     if (newData.docs[0]) {
@@ -82,7 +70,7 @@ function Cart() {
 
     newItems.push(itemRef);
 
-    await updateDoc(ref, { items: newItems });
+    await updateDoc(ref, {items: newItems});
 
     const newData = await getDocs(q);
 
@@ -110,7 +98,7 @@ function Cart() {
       newItems.findIndex((item) => item.id === itemRef.id),
       1
     );
-    await updateDoc(ref, { items: newItems });
+    await updateDoc(ref, {items: newItems});
     const newData = await getDocs(q);
 
     if (newData.docs[0]) {
@@ -125,7 +113,7 @@ function Cart() {
   const total = useMemo(
     () =>
       cartItems.reduce(
-        (acc, { item, count }) => (acc += item.price * count),
+        (acc, {item, count}) => (acc += item.price * count),
         0
       ),
     [cartItems]
@@ -138,7 +126,7 @@ function Cart() {
     const data = await getDocs(q);
 
     let ref = data.docs[0].ref;
-    await updateDoc(ref, { items: [] });
+    await updateDoc(ref, {items: []});
     const newData = await getDocs(q);
     if (newData.docs[0]) {
       dispatch(
@@ -156,7 +144,7 @@ function Cart() {
         <div className="shopping-cart">
           <div className="title">Shopping Bag</div>
 
-          {cartItems.map(({ item, count }) => (
+          {cartItems.map(({item, count}) => (
             <div className="item">
               <div className="buttons">
                 <span
@@ -166,7 +154,7 @@ function Cart() {
               </div>
 
               <div className="image">
-                <img src={item.ProductImage} alt="Image1" />
+                <img src={item.ProductImage} alt="Image1"/>
               </div>
 
               <div className="description ">
@@ -186,7 +174,7 @@ function Cart() {
                     alt="Cart"
                   />
                 </button>
-                <input type="text" name="name" value={count} />
+                <input type="text" name="name" value={count}/>
                 <button
                   className="plus-btn addRemoveBtn"
                   type="button"
@@ -205,7 +193,7 @@ function Cart() {
           ))}
 
           <div className="total">
-            <div>Total {total} AMD </div>
+            <div>Total {total} AMD</div>
             <div>
               <Button
                 sx={{

@@ -1,11 +1,8 @@
 import React from "react";
 import MenuBar from "../NavBar/MenuBar/MenuBar";
-import Navbar from "../NavBar/Menu";
-import { Box, CircularProgress } from "@mui/material";
-import { useSelector } from "react-redux";
-import { selectUserAuth } from "store/slices/userSlices";
 import Footer from "components/pages/Footer";
-import { makeStyles } from "@mui/styles";
+import {makeStyles} from "@mui/styles";
+import {Outlet} from "react-router";
 
 const useStyle = makeStyles({
   box: {
@@ -18,21 +15,14 @@ const useStyle = makeStyles({
 });
 
 function Main() {
-  const classes = useStyle();
-  const isAutheinticating = useSelector(selectUserAuth);
+
   return (
     <div>
-      {isAutheinticating ? (
-        <Box className={classes.box}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        <>
-          <MenuBar />
-          <Navbar />
-          <Footer />
-        </>
-      )}
+
+      <MenuBar/>
+      <Outlet/>
+      <Footer/>
+
     </div>
   );
 }

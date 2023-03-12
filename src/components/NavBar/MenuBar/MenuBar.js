@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, {useState} from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,18 +10,15 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 //import logo from "./logo.png";
-import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
-import { selectUserCart, selectUserId } from "../../../store/slices/userSlices";
-import { signOut } from "firebase/auth";
-import { makeStyles } from "@mui/styles";
+import {Button} from "@mui/material";
+import {useSelector} from "react-redux";
+import {selectUserCart, selectUserId} from "../../../store/slices/userSlices";
+import {signOut} from "firebase/auth";
+import {makeStyles} from "@mui/styles";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import AdminContext from "context/AdminContext";
-import { useState } from "react";
-import CategoriesContext from "context/CategoriesContext";
 import {auth} from "../../../firebase";
 
 const useStyles = makeStyles({
@@ -61,12 +58,12 @@ const useStyles = makeStyles({
 });
 
 export default function MenuBar() {
-  const { googleProfileImg } = useContext(AdminContext);
-  const { setGetCatName } = useContext(CategoriesContext);
+  // const {googleProfileImg} = useContext(AdminContext);
+  // const {setGetCatName} = useContext(CategoriesContext);
   const classes = useStyles();
   const userId = useSelector(selectUserId);
   const navigate = useNavigate();
-  const { items = [] } = useSelector(selectUserCart) || {};
+  const {items = []} = useSelector(selectUserCart) || {};
   let pages = [];
 
   const onLogoutClick = async () => {
@@ -78,7 +75,7 @@ export default function MenuBar() {
     if (userId === "dJ2ymqhFJ2NfdKOzlagIYet1EF32") {
       pages.push("Admin", "Home", "Boys", "Girls", "Accessories", "ContactUs");
     } else {
-      pages.push("Home", "Boys", "Girls", "Accessories", "ContactUs");
+      pages.push("Admin", "Home", "Boys", "Girls", "Accessories", "ContactUs");
     }
     return pages;
   };
@@ -98,7 +95,7 @@ export default function MenuBar() {
   };
 
   const onAddPageName = (name) => {
-    setGetCatName(name);
+    // setGetCatName(name);
   };
 
   return (
@@ -110,7 +107,7 @@ export default function MenuBar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            sx={{mr: 2, display: {xs: "none", md: "flex"}}}
           >
             <Link to="/home">
               <img
@@ -121,7 +118,7 @@ export default function MenuBar() {
             </Link>
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{flexGrow: 1, display: {xs: "flex", md: "none"}}}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -130,7 +127,7 @@ export default function MenuBar() {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <MenuIcon/>
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -147,7 +144,7 @@ export default function MenuBar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: "block", md: "none" },
+                display: {xs: "block", md: "none"},
               }}
             >
               {pages.map((page) => (
@@ -165,7 +162,7 @@ export default function MenuBar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+            sx={{flexGrow: 1, display: {xs: "flex", md: "none"}}}
           >
             <Link to="/" className={classes.displayFlex}>
               <img
@@ -176,7 +173,7 @@ export default function MenuBar() {
             </Link>
           </Typography>
           <Box
-            sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+            sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}
             className="navMenu"
           >
             {pages.map((page) => (
@@ -190,7 +187,7 @@ export default function MenuBar() {
                 >
                   <NavLink
                     to={`/${page}`}
-                    className={({ isActive }) =>
+                    className={({isActive}) =>
                       isActive ? "link_active" : "link"
                     }
                     onClick={() => onAddPageName(page)}
@@ -207,30 +204,30 @@ export default function MenuBar() {
             <Badge
               badgeContent={items.length}
               color="error"
-              sx={{ mr: "30px" }}
+              sx={{mr: "30px"}}
             >
               <ShoppingCartIcon
                 onClick={onNavToCard}
-                sx={{ cursor: "pointer" }}
+                sx={{cursor: "pointer"}}
               />
             </Badge>
           ) : null}
 
-          <Box sx={{ flexGrow: 0, display: "flex" }}>
+          <Box sx={{flexGrow: 0, display: "flex"}}>
             {userId ? (
               <Avatar
                 alt="Sharp"
-                src={
-                  googleProfileImg
-                    ? googleProfileImg
-                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKsnRr9lLE015lJ_Vq1zNM3MtVIi5BN9WPAw&usqp=CAU"
-                }
+                // src={
+                //   googleProfileImg
+                //     ? googleProfileImg
+                //     : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKsnRr9lLE015lJ_Vq1zNM3MtVIi5BN9WPAw&usqp=CAU"
+                // }
               />
             ) : null}
 
             {userId ? (
               <>
-                <Button onClick={onLogoutClick} style={{ color: "inherit" }}>
+                <Button onClick={onLogoutClick} style={{color: "inherit"}}>
                   LogOut
                 </Button>
               </>
@@ -245,7 +242,7 @@ export default function MenuBar() {
                   aria-haspopup="true"
                   color="inherit"
                 />
-                <AccountCircle />
+                <AccountCircle/>
               </Link>
             )}
           </Box>

@@ -1,56 +1,47 @@
 //import logo from "./logo.svg";
-import React, {useCallback, useContext, useEffect} from "react";
+import React from "react";
 import "./App.css";
+import {Route, Routes} from "react-router-dom";
+import SignIn from "./components/NavBar/MenuBar/SignIn/SignIn";
+import SignUp from "./components/NavBar/MenuBar/SignUp/SignUp";
+import ForBoys from "./components/pages/ForBoys";
+import ForGirls from "./components/pages/ForGirls";
+import ForAccessories from "./components/pages/ForAccessories";
+import ContactUs from "./components/pages/ContactUs";
+import Admin from "./components/pages/Admin";
+import Cart from "./components/pages/Cart";
+import NotfundPage from "./components/pages/NotfundPage";
+import Products from "./components/pages/Product";
+import {useSelector} from "react-redux";
+import {selectUserId} from "./store/slices/userSlices";
 import Main from "./components/Maket/Main";
-import {onAuthStateChanged} from "firebase/auth";
-import {useDispatch, useSelector} from "react-redux";
-import {selectUserId, setUser, setUserCart} from "./store/slices/userSlices";
-import {auth, db} from "./firebase";
-import AdminContext from "context/AdminContext";
-import {collection, getDocs, query, where} from "@firebase/firestore";
+import Home from "./components/Maket/Home";
 
 function App() {
-  const dispatch = useDispatch();
-  const {setGoogleProfileImg} = useContext(AdminContext);
   const userId = useSelector(selectUserId);
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setGoogleProfileImg(user.photoURL);
+  return (
 
-        dispatch(setUser(user));
-      } else {
-        setGoogleProfileImg(null);
-        dispatch(setUser(null));
-        dispatch(setUserCart(null));
-      }
-    });
-  }, [dispatch, setGoogleProfileImg]);
+    <Routes>
+      <Route path='/' element={<Main/>}>
+        <Route index path='home' element={<Home/>}/>
+        <Route path="/sign-in" element={<SignIn/>}/>
+        <Route path="/sign-up" element={<SignUp/>}/>
+        <Route path="/boys" element={<ForBoys/>}/>
+        <Route path="/girls" element={<ForGirls/>}/>
+        <Route path="/accessories" element={<ForAccessories/>}/>
+        <Route path="/contactus" element={<ContactUs/>}/>
+        {/*{userId === "1Hxk22s9WCc0MSOmbOqI3lPYKzE2" && (*/}
+        <Route path="/Admin" element={<Admin/>}/>
+        {/*)}*/}
+        {/*{userId && <Route path="/Cart" element={<Cart/>}/>}*/}
+        <Route path="/Cart" element={<Cart/>}/>}
+        <Route path="*" element={<NotfundPage/>}/>
+        <Route path={`products/:itemName`} element={<Products/>}/>
+      </Route>
+    </Routes>
 
-  const getUserCart = useCallback(
-    async (userId) => {
-      const userRef = db.collection("users").doc(userId);
-      const response = collection(db, "cart");
-      const q = query(response, where("userRef", "==", userRef));
-      const data = await getDocs(q);
-
-      if (data.docs[0]) {
-        dispatch(
-          setUserCart({...data.docs[0].data(), id: data.docs[0].data(0).uid})
-        );
-      }
-    },
-    [dispatch]
   );
-
-  useEffect(() => {
-    if (userId) {
-      getUserCart(userId);
-    }
-  }, [userId, getUserCart]);
-
-  return <Main/>;
 }
 
 export default App;

@@ -448,7 +448,7 @@ const Admin = () => {
                     </div>
                   </IconButton>
                   {error && (
-                    <span style={{marginLeft: 30, color: "red"}}>
+                    <span style={{marginLeft: 30, color: "green"}}>
                       {error}
                     </span>
                   )}
