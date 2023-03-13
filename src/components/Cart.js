@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 
-import {db} from "../../firebase";
+import {db} from "../firebase";
 import {Button} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {selectUserCartUniqueItems, selectUserId, setUserCart,} from "../../store/slices/userSlices";
-import {arrayRemove, collection, getDoc, getDocs, query, updateDoc, where,} from "@firebase/firestore";
+import {selectUserCartUniqueItems, selectUserId, setUserCart,} from "../store/slices/userSlices";
+import {arrayRemove, collection, getDocs, query, updateDoc, where,} from "@firebase/firestore";
 import CartPayment from "./CartPayment";
 
 function Cart() {
@@ -22,23 +22,23 @@ function Cart() {
     setOpen(false);
   };
 
-  const getCartItems = useCallback(async () => {
-    if (items.length) {
-      const cI = await Promise.all(items.map((i) => getDoc(i.item)));
-      setCartItems(
-        cI.map((i, ind) => ({
-          item: {...i.data(), ref: i.ref},
-          count: items[ind].count,
-        }))
-      );
-    } else {
-      setCartItems([]);
-    }
-  }, [items, setCartItems]);
+  // const getCartItems = useCallback(async () => {
+  //   if (items.length) {
+  //     const cI = await Promise.all(items.map((i) => getDoc(i.item)));
+  //     setCartItems(
+  //       cI.map((i, ind) => ({
+  //         item: {...i.data(), ref: i.ref},
+  //         count: items[ind].count,
+  //       }))
+  //     );
+  //   } else {
+  //     setCartItems([]);
+  //   }
+  // }, [items, setCartItems]);
 
-  useEffect(() => {
-    getCartItems();
-  }, [getCartItems]);
+  // useEffect(() => {
+  //   getCartItems();
+  // }, [getCartItems]);
 
   const removeToCart = async (itemRef) => {
     const userRef = db.collection("users").doc(userId);

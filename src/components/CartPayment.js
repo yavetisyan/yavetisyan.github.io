@@ -1,16 +1,10 @@
-import React, { useState } from "react";
-import {
-  Alert,
-  AlertTitle,
-  Button,
-  Dialog,
-  DialogActions,
-} from "@mui/material";
+import React, {useState} from "react";
+import {Alert, AlertTitle, Button, Dialog, DialogActions,} from "@mui/material";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
-const CartPayment = ({ open, onclose, emptyCart }) => {
+const CartPayment = ({open, onclose, emptyCart}) => {
   const [confirm, setConfirm] = useState(false);
   const navigate = useNavigate();
 
@@ -30,7 +24,7 @@ const CartPayment = ({ open, onclose, emptyCart }) => {
     e.preventDefault();
     if (name && number && expiry && cvc) {
       setConfirm(true);
-      setState({ opened: true, vertical: "top", horizontal: "center" });
+      setState({opened: true, vertical: "top", horizontal: "center"});
 
       setTimeout(() => {
         emptyCart();
@@ -40,7 +34,7 @@ const CartPayment = ({ open, onclose, emptyCart }) => {
   };
 
   const handleClose = () => {
-    setState({ ...state, opened: false });
+    setState({...state, opened: false});
   };
 
   return (
@@ -57,7 +51,7 @@ const CartPayment = ({ open, onclose, emptyCart }) => {
           number={number}
           focused={focus}
         />
-        <form action="">
+        <form action="src/pages">
           <input
             type="number"
             name="number"

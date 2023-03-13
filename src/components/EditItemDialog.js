@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from "react";
+import React, {useCallback, useState} from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
@@ -8,9 +8,8 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import {Container, TextareaAutosize} from "@mui/material";
-import {collection, doc, getDocs, updateDoc} from "@firebase/firestore";
-import {db} from "../../firebase";
-import ProductsContext from "context/ProductsContext";
+import {doc, updateDoc} from "@firebase/firestore";
+import {db} from "../firebase";
 
 
 const EditItemDialog = ({item, onClose}) => {
@@ -19,7 +18,7 @@ const EditItemDialog = ({item, onClose}) => {
     {categories: "Girls"},
     {categories: "Accessories"},
   ];
-  const {setProducts} = useContext(ProductsContext);
+  // const {setProducts} = useContext(ProductsContext);
   const [categories, setCategories] = useState(
     listCategories.find((c) => c.categories === item.categories)?.categories
   );
@@ -42,23 +41,23 @@ const EditItemDialog = ({item, onClose}) => {
   };
 
   const addProduct = useCallback(async () => {
-    try {
-      const products = await getDocs(collection(db, "items"));
-      const productArray = [];
-      products.forEach((doc) => {
-        const obj = {
-          ...doc.data(),
-          id: doc.id,
-          cart: false,
-          ref: doc.ref,
-        };
-        productArray.push(obj);
-      });
-      setProducts(productArray);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [setProducts]);
+    // try {
+    //   const products = await getDocs(collection(db, "items"));
+    //   const productArray = [];
+    //   products.forEach((doc) => {
+    //     const obj = {
+    //       ...doc.data(),
+    //       id: doc.id,
+    //       cart: false,
+    //       ref: doc.ref,
+    //     };
+    //     productArray.push(obj);
+    //   });
+    //   // setProducts(productArray);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }, []);
 
   const onEditItems = async (id) => {
     const docRef = doc(db, "items", id);

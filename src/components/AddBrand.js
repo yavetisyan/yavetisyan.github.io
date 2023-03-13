@@ -1,9 +1,7 @@
-import { addDoc, collection } from "@firebase/firestore";
-import { Box, TextField } from "@mui/material";
+import {Box, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
-import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
-import {db} from "../../firebase";
+import {makeStyles} from "@mui/styles";
+import React, {useState} from "react";
 
 const useStyle = makeStyles({
   brandBox: {
@@ -21,22 +19,22 @@ function AddBrand() {
 
   // add brand
   const onAddBrand = async (id) => {
-    const brandRef = collection(db, "brands");
-    const payload = {
-      name: productName,
-      brandName: productName,
-    };
-
-    payload.name ? await addDoc(brandRef, payload) : alert("Enter Value");
-
-    setProductName("");
+    // const brandRef = collection(db, "brands");
+    // const payload = {
+    //   name: productName,
+    //   brandName: productName,
+    // };
+    //
+    // payload.name ? await addDoc(brandRef, payload) : alert("Enter Value");
+    //
+    // setProductName("");
   };
 
   return (
     <Box
       component="form"
       sx={{
-        "& .MuiTextField-root": { m: 1, width: "25ch" },
+        "& .MuiTextField-root": {m: 1, width: "25ch"},
       }}
       noValidate
       autoComplete="off"
@@ -56,7 +54,7 @@ function AddBrand() {
           variant="contained"
           disableElevation
           onClick={onAddBrand}
-          style={{ marginLeft: 50 }}
+          style={{marginLeft: 50}}
         >
           Add brand name
         </Button>

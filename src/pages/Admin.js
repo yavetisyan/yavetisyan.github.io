@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, {useState} from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -12,14 +12,12 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Stack from "@mui/material/Stack";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {DataGrid} from "@mui/x-data-grid";
-import {addDoc, collection, getDocs, onSnapshot} from "@firebase/firestore";
-import {db, storage} from "../../firebase";
-import ProductsContext from "context/ProductsContext";
-import AdminContext from "context/AdminContext";
+import {collection, getDocs} from "@firebase/firestore";
+import {db} from "../firebase";
 import {Container, TextareaAutosize} from "@mui/material";
-import EditItemDialog from "./EditItemDialog";
-import DeletIetemDialog from "./DeleteItemDialog";
-import AddBrand from "./AddBrand";
+import EditItemDialog from "../components/EditItemDialog";
+import DeletIetemDialog from "../components/DeleteItemDialog";
+import AddBrand from "../components/AddBrand";
 import {makeStyles} from "@mui/styles";
 
 
@@ -57,9 +55,6 @@ const useStyle = makeStyles({
 const Admin = () => {
   const classes = useStyle(0);
   let formId = 1;
-  const {imageUrl, setImageUrl} = useContext(AdminContext);
-  const {products, setProducts} =
-    useContext(ProductsContext);
 
   const [editingRow, setEditingRow] = useState(null);
   const [deleteRow, setDeleteRow] = useState(null);
@@ -91,60 +86,60 @@ const Admin = () => {
     {categories: "Accessories"},
   ];
 
-  useEffect(() => {
-    onSnapshot(collection(db, "brands"), (brands) => {
-      setBrandList(
-        brands.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-          referance: doc.ref,
-        }))
-      );
-    });
-  }, []);
+  // useEffect(() => {
+  //   onSnapshot(collection(db, "brands"), (brands) => {
+  //     setBrandList(
+  //       brands.docs.map((doc) => ({
+  //         ...doc.data(),
+  //         id: doc.id,
+  //         referance: doc.ref,
+  //       }))
+  //     );
+  //   });
+  // }, []);
 
-  const addProduct = useCallback(async () => {
-    try {
-      const products = await getDocs(collection(db, "items"));
-      const productArray = [];
-      products.forEach((doc) => {
-        const obj = {
-          ...doc.data(),
-          id: doc.id,
-          cart: false,
-          ref: doc.ref,
-        };
-        productArray.push(obj);
-      });
-      setProducts(productArray);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [setProducts]);
-
-  // Add items
-  const onAddItems = async () => {
-    const brandsRef = collection(db, "items");
-
-    const payload = {
-      categories,
-      price,
-      description,
-      itemName,
-      brandName: brandList.find((b) => b.id === brandName)?.brandName,
-      brand: brandList.find((b) => b.id === brandName)?.referance,
-      ProductImage: imageUrl,
-    };
-
-    payload.price ? await addDoc(brandsRef, payload) : alert("Enter value");
-    addProduct();
-    setPrice("");
-    setDescription("");
-    setImageUrl("");
-    setItemName("");
-    setBrandName("");
-    setCategories("");
-  };
+  // const addProduct = useCallback(async () => {
+  //   try {
+  //     const products = await getDocs(collection(db, "items"));
+  //     const productArray = [];
+  //     products.forEach((doc) => {
+  //       const obj = {
+  //         ...doc.data(),
+  //         id: doc.id,
+  //         cart: false,
+  //         ref: doc.ref,
+  //       };
+  //       productArray.push(obj);
+  //     });
+  //     setProducts(productArray);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, [setProducts]);
+  //
+  // // Add items
+  // const onAddItems = async () => {
+  //   const brandsRef = collection(db, "items");
+  //
+  //   const payload = {
+  //     categories,
+  //     price,
+  //     description,
+  //     itemName,
+  // /Admin    brandName: brandList.find((b) => b.id === brandName)?.brandName,
+  //     brand: brandList.find((b) => b.id === brandName)?.referance,
+  //     ProductImage: imageUrl,
+  //   };
+  //
+  //   payload.price ? await addDoc(brandsRef, payload) : alert("Enter value");
+  //   addProduct();
+  //   setPrice("");
+  //   setDescription("");
+  //   setImageUrl("");
+  //   setItemName("");
+  //   setBrandName("");
+  //   setCategories("");
+  // };
 
   // add images
 
@@ -164,31 +159,31 @@ const Admin = () => {
   const addImageToStorage = (e) => {
     e.preventDefault();
 
-    const uploadImg = storage
-      .ref(`items-images/${productImg.name}`)
-      .put(productImg);
-
-    uploadImg.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = Math.random(
-          (snapshot.bytesTransfreed / snapshot.totalBytes) * 100
-        );
-        setProgress(progress);
-      },
-      (error) => {
-        alert("Upload Pic");
-      },
-      () => {
-        storage
-          .ref("items-images")
-          .child(productImg.name)
-          .getDownloadURL()
-          .then((url) => {
-            setImageUrl(url);
-          });
-      }
-    );
+    // const uploadImg = storage
+    //   .ref(`items-images/${productImg.name}`)
+    //   .put(productImg);
+    //
+    // uploadImg.on(
+    //   "state_changed",
+    //   (snapshot) => {
+    //     const progress = Math.random(
+    //       (snapshot.bytesTransfreed / snapshot.totalBytes) * 100
+    //     );
+    //     setProgress(progress);
+    //   },
+    //   (error) => {
+    //     alert("Upload Pic");
+    //   },
+    //   () => {
+    //     storage
+    //       .ref("items-images")
+    //       .child(productImg.name)
+    //       .getDownloadURL()
+    //       .then((url) => {
+    //         setImageUrl(url);
+    //       });
+    //   }
+    // );
   };
 
   // add images slider
@@ -209,30 +204,30 @@ const Admin = () => {
   const addImageToSlider = (e) => {
     e.preventDefault();
 
-    const uploadImg = storage.ref(`slider/${sliderImg.name}`).put(sliderImg);
-
-    uploadImg.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = Math.random(
-          (snapshot.bytesTransfreed / snapshot.totalBytes) * 100
-        );
-        setProgress(progress);
-      },
-      (error) => {
-        alert("Upload Pic");
-      },
-      () => {
-        storage
-          .ref("slider")
-          .child(sliderImg.name)
-          .getDownloadURL()
-          .then((url) => {
-            console.log(url);
-            setImageUrl(url);
-          });
-      }
-    );
+    // const uploadImg = storage.ref(`slider/${sliderImg.name}`).put(sliderImg);
+    //
+    // uploadImg.on(
+    //   "state_changed",
+    //   (snapshot) => {
+    //     const progress = Math.random(
+    //       (snapshot.bytesTransfreed / snapshot.totalBytes) * 100
+    //     );
+    //     setProgress(progress);
+    //   },
+    //   (error) => {
+    //     alert("Upload Pic");
+    //   },
+    //   () => {
+    //     storage
+    //       .ref("slider")
+    //       .child(sliderImg.name)
+    //       .getDownloadURL()
+    //       .then((url) => {
+    //         console.log(url);
+    //         setImageUrl(url);
+    //       });
+    //   }
+    // );
   };
 
   // change brand value
@@ -381,11 +376,11 @@ const Admin = () => {
           <div className={classes.addImage}>
             <div className={classes.imageBox}>
               <img
-                src={
-                  imageUrl
-                    ? imageUrl
-                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnUifa5xG4i4H7hdshBpmEQXICfDNfh9LWBARnvizvuF8GrJjjyL-ID-F7PR42vL1trYw&usqp=CAU"
-                }
+                // src={
+                //   imageUrl
+                //     ? imageUrl
+                //     : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnUifa5xG4i4H7hdshBpmEQXICfDNfh9LWBARnvizvuF8GrJjjyL-ID-F7PR42vL1trYw&usqp=CAU"
+                // }
                 alt="uploaded_image"
                 className={classes.showImage}
               />
@@ -474,7 +469,7 @@ const Admin = () => {
           marginBottom: 50,
         }}
       >
-        <Button variant="contained" disableElevation onClick={onAddItems}>
+        <Button variant="contained" disableElevation>
           Add product
         </Button>
       </div>
@@ -529,26 +524,26 @@ const Admin = () => {
             },
           ]}
 
-          rows={products.map(
-            ({
-               id,
-               brandName,
-               price,
-               description,
-               ProductImage,
-               itemName,
-               categories,
-             }) => ({
-              id,
-              formId: formId++,
-              categories,
-              brandName,
-              itemName,
-              price,
-              description,
-              ProductImage,
-            })
-          )}
+          // rows={products.map(
+          //   ({
+          //      id,
+          //      brandName,
+          //      price,
+          //      description,
+          //      ProductImage,
+          //      itemName,
+          //      categories,
+          //    }) => ({
+          //     id,
+          //     formId: formId++,
+          //     categories,
+          //     brandName,
+          //     itemName,
+          //     price,
+          //     description,
+          //     ProductImage,
+          //   })
+          // )}
         />
       </div>
 

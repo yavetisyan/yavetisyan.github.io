@@ -1,22 +1,11 @@
-import { Button, Container, Grid } from "@mui/material";
+import {Button, Container, Grid} from "@mui/material";
 import ProductsContext from "context/ProductsContext";
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import { useParams } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
+import React, {useContext, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {makeStyles} from "@mui/styles";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { db } from "../../firebase";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUserId, setUserCart } from "store/slices/userSlices";
-import {
-  arrayUnion,
-  collection,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "@firebase/firestore";
+import {useDispatch, useSelector} from "react-redux";
+import {selectUserId} from "store/slices/userSlices";
 import NotfundPage from "./NotfundPage";
 import ScrollToTop from "./ScrollToTop";
 
@@ -66,34 +55,34 @@ const useStyle = makeStyles({
 
 function Product() {
   const dispatch = useDispatch();
-  const { prodItem } = useContext(ProductsContext);
+  const {prodItem} = useContext(ProductsContext);
   const classes = useStyle();
   const userId = useSelector(selectUserId);
   const navigate = useNavigate();
-  const { itemName } = useParams();
-  const { itemPrice, itemDescription, itemImage } = useContext(ProductsContext);
+  const {itemName} = useParams();
+  const {itemPrice, itemDescription, itemImage} = useContext(ProductsContext);
   const [added, setAdded] = useState(true);
 
   const onAddItem = async (itemRef) => {
-    const userRef = db.collection("users").doc(userId);
-
-    const response = collection(db, "cart");
-    const q = query(response, where("userRef", "==", userRef));
-    const data = await getDocs(q);
-    let ref = data.docs[0].ref;
-    await updateDoc(ref, { items: arrayUnion(itemRef) });
-
-    const newData = await getDocs(q);
-
-    if (newData.docs[0]) {
-      dispatch(
-        setUserCart({
-          ...newData.docs[0].data(),
-          id: newData.docs[0].data(0).uid,
-        })
-      );
-    }
-    setAdded(false);
+    // const userRef = db.collection("users").doc(userId);
+    //
+    // const response = collection(db, "cart");
+    // const q = query(response, where("userRef", "==", userRef));
+    // const data = await getDocs(q);
+    // let ref = data.docs[0].ref;
+    // await updateDoc(ref, {items: arrayUnion(itemRef)});
+    //
+    // const newData = await getDocs(q);
+    //
+    // if (newData.docs[0]) {
+    //   dispatch(
+    //     setUserCart({
+    //       ...newData.docs[0].data(),
+    //       id: newData.docs[0].data(0).uid,
+    //     })
+    //   );
+    // }
+    // setAdded(false);
   };
 
   const goTocart = () => {
@@ -108,7 +97,7 @@ function Product() {
         {prodItem ? (
           <Grid container spacing={5} className={classes.top}>
             <Grid item md={5}>
-              <img src={itemImage} alt="item" />
+              <img src={itemImage} alt="item"/>
             </Grid>
             <Grid item md={7}>
               <h1>{itemName}</h1>
@@ -123,7 +112,7 @@ function Product() {
                       className={classes.btn}
                     >
                       Add to Cart
-                      <ShoppingCartIcon className={classes.shopCart} />
+                      <ShoppingCartIcon className={classes.shopCart}/>
                     </Button>
                   </>
                 ) : (
@@ -135,7 +124,7 @@ function Product() {
                       className={classes.btn}
                     >
                       Go to Cart
-                      <ShoppingCartIcon className={classes.shopCart} />
+                      <ShoppingCartIcon className={classes.shopCart}/>
                     </Button>
                   </>
                 )
@@ -146,7 +135,7 @@ function Product() {
                   className={classes.btn}
                 >
                   Add to cart
-                  <ShoppingCartIcon className={classes.shopCart} />
+                  <ShoppingCartIcon className={classes.shopCart}/>
                 </Button>
               )}
 
@@ -155,9 +144,9 @@ function Product() {
             </Grid>
           </Grid>
         ) : (
-          <NotfundPage />
+          <NotfundPage/>
         )}
-        <ScrollToTop />
+        <ScrollToTop/>
       </Container>
     </div>
   );

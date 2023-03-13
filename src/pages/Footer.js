@@ -1,8 +1,8 @@
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { Link } from "@mui/material";
+import {Link} from "@mui/material";
 import React from "react";
-import "../../App.css";
+import "../App.css";
 import Typography from "@mui/material/Typography";
 
 function Copyright() {
@@ -17,6 +17,7 @@ function Copyright() {
     </Typography>
   );
 }
+
 function Footer() {
   return (
     <>
@@ -64,9 +65,10 @@ function Footer() {
           </a>
         </div>
 
-        <Copyright />
+        <Copyright/>
       </footer>
     </>
   );
 }
+
 export default Footer;

@@ -2,20 +2,20 @@
 import React from "react";
 import "./App.css";
 import {Route, Routes} from "react-router-dom";
-import SignIn from "./components/NavBar/MenuBar/SignIn/SignIn";
-import SignUp from "./components/NavBar/MenuBar/SignUp/SignUp";
-import ForBoys from "./components/pages/ForBoys";
-import ForGirls from "./components/pages/ForGirls";
-import ForAccessories from "./components/pages/ForAccessories";
-import ContactUs from "./components/pages/ContactUs";
-import Admin from "./components/pages/Admin";
-import Cart from "./components/pages/Cart";
-import NotfundPage from "./components/pages/NotfundPage";
-import Products from "./components/pages/Product";
 import {useSelector} from "react-redux";
 import {selectUserId} from "./store/slices/userSlices";
-import Main from "./components/Maket/Main";
-import Home from "./components/Maket/Home";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Home from "./pages/Home";
+import Main from "./pages/Main";
+import ForBoys from "./pages/ForBoys";
+import ForGirls from "./pages/ForGirls";
+import ForAccessories from "./pages/ForAccessories";
+import ContactUs from "./pages/ContactUs";
+import Admin from "./pages/Admin";
+import Cart from "./components/Cart";
+import NotfundPage from "./components/NotfundPage";
+import {ProductionQuantityLimitsSharp} from "@mui/icons-material";
 
 function App() {
   const userId = useSelector(selectUserId);
@@ -24,7 +24,7 @@ function App() {
 
     <Routes>
       <Route path='/' element={<Main/>}>
-        <Route index path='home' element={<Home/>}/>
+        <Route index path="/home" element={<Home/>}/>
         <Route path="/sign-in" element={<SignIn/>}/>
         <Route path="/sign-up" element={<SignUp/>}/>
         <Route path="/boys" element={<ForBoys/>}/>
@@ -37,7 +37,7 @@ function App() {
         {/*{userId && <Route path="/Cart" element={<Cart/>}/>}*/}
         <Route path="/Cart" element={<Cart/>}/>}
         <Route path="*" element={<NotfundPage/>}/>
-        <Route path={`products/:itemName`} element={<Products/>}/>
+        <Route path={`products/:itemName`} element={<ProductionQuantityLimitsSharp/>}/>
       </Route>
     </Routes>
 

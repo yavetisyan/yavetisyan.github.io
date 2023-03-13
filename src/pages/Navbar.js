@@ -14,12 +14,12 @@ import {Link, NavLink, useNavigate} from "react-router-dom";
 //import logo from "./logo.png";
 import {Button} from "@mui/material";
 import {useSelector} from "react-redux";
-import {selectUserCart, selectUserId} from "../../../store/slices/userSlices";
+import {selectUserCart, selectUserId} from "../store/slices/userSlices";
 import {signOut} from "firebase/auth";
 import {makeStyles} from "@mui/styles";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import {auth} from "../../../firebase";
+import {auth} from "../firebase";
 
 const useStyles = makeStyles({
   button: {
@@ -57,29 +57,20 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MenuBar() {
+export default function Navbar() {
   // const {googleProfileImg} = useContext(AdminContext);
   // const {setGetCatName} = useContext(CategoriesContext);
   const classes = useStyles();
   const userId = useSelector(selectUserId);
   const navigate = useNavigate();
   const {items = []} = useSelector(selectUserCart) || {};
-  let pages = [];
+  const pages = ["admin", "home", "boys", "girls", "accessories", "contactUs"]
 
   const onLogoutClick = async () => {
     await signOut(auth);
     navigate("/home");
   };
 
-  const manuPages = () => {
-    if (userId === "dJ2ymqhFJ2NfdKOzlagIYet1EF32") {
-      pages.push("Admin", "Home", "Boys", "Girls", "Accessories", "ContactUs");
-    } else {
-      pages.push("Admin", "Home", "Boys", "Girls", "Accessories", "ContactUs");
-    }
-    return pages;
-  };
-  manuPages();
 
   const menuId = "primary-search-account-menu";
   const [anchorElNav, setAnchorElNav] = useState(null);

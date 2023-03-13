@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,13 +10,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {NavLink, useNavigate} from "react-router-dom";
-import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup,} from "firebase/auth";
 import {useDispatch} from "react-redux";
-import {setUserCart} from "store/slices/userSlices";
-import {addDoc, collection, doc, getDoc, getDocs, query, setDoc, where,} from "@firebase/firestore";
-import ScrollToTop from "components/pages/ScrollToTop";
+import ScrollToTop from "components/ScrollToTop";
 import {makeStyles} from "@mui/styles";
-import {auth, db} from "../../../../firebase";
 
 const useStyle = makeStyles({
   box: {
@@ -40,89 +36,89 @@ export default function SignIn() {
 
   //get data
   const getData = async () => {
-    try {
-      const users = await getDocs(collection(db, "users"));
-      const usersArray = [];
-      users.forEach((doc) => {
-        const obj = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        usersArray.push(obj);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const users = await getDocs(collection(db, "users"));
+    //   const usersArray = [];
+    //   users.forEach((doc) => {
+    //     const obj = {
+    //       id: doc.id,
+    //       ...doc.data(),
+    //     };
+    //     usersArray.push(obj);
+    //   });
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
-
-  useEffect(() => {
-    getData();
-  }, []);
+  //
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   //-------------------------
 
   const loginWithGoogle = async (e) => {
-    e.preventDefault();
-
-    try {
-      const provider = new GoogleAuthProvider();
-      const googleUser = await signInWithPopup(auth, provider);
-      const userRef = doc(db, "users", googleUser.user.uid);
-
-      const existingUser = await getDoc(userRef);
-
-      if (!existingUser.exists()) {
-        await setDoc(doc(db, "users", googleUser.user.uid), {
-          name: googleUser.user.displayName.split(" ")[0],
-          surname: googleUser.user.displayName.split(" ").slice(1).join(" "),
-          email: googleUser.user.email,
-        });
-
-        await addDoc(collection(db, "cart"), {
-          userRef,
-          items: [],
-        });
-
-        const response = collection(db, "cart");
-        const q = query(response, where("userRef", "==", userRef));
-        const data = await getDocs(q);
-
-        if (data.docs[0]) {
-          dispatch(
-            setUserCart({
-              ...data.docs[0].data(),
-              id: data.docs[0].data(0).uid,
-            })
-          );
-        }
-      }
-
-      navigate("/home");
-    } catch (error) {
-      alert("Google error");
-    }
+    // e.preventDefault();
+    //
+    // try {
+    //   const provider = new GoogleAuthProvider();
+    //   const googleUser = await signInWithPopup(auth, provider);
+    //   const userRef = doc(db, "users", googleUser.user.uid);
+    //
+    //   const existingUser = await getDoc(userRef);
+    //
+    //   if (!existingUser.exists()) {
+    //     await setDoc(doc(db, "users", googleUser.user.uid), {
+    //       name: googleUser.user.displayName.split(" ")[0],
+    //       surname: googleUser.user.displayName.split(" ").slice(1).join(" "),
+    //       email: googleUser.user.email,
+    //     });
+    //
+    //     await addDoc(collection(db, "cart"), {
+    //       userRef,
+    //       items: [],
+    //     });
+    //
+    //     const response = collection(db, "cart");
+    //     const q = query(response, where("userRef", "==", userRef));
+    //     const data = await getDocs(q);
+    //
+    //     if (data.docs[0]) {
+    //       dispatch(
+    //         setUserCart({
+    //           ...data.docs[0].data(),
+    //           id: data.docs[0].data(0).uid,
+    //         })
+    //       );
+    //     }
+    //   }
+    //
+    //   navigate("/home");
+    // } catch (error) {
+    //   alert("Google error");
+    // }
   };
 
   const loginWithEmail = async (e) => {
-    e.preventDefault();
-    setOpen(true);
-    try {
-      const regUser = await signInWithEmailAndPassword(
-        auth,
-        loginEmail,
-        loginPass
-      );
-
-      if (regUser.user.email === "admin@admin.com") {
-        navigate("/Admin");
-      } else {
-        navigate("/home");
-      }
-      sessionStorage.setItem("Any_Key", regUser._tokenResponse.refreshToken);
-    } catch (error) {
-      setError(true);
-      console.log(error);
-    }
+    // e.preventDefault();
+    // setOpen(true);
+    // try {
+    //   const regUser = await signInWithEmailAndPassword(
+    //     auth,
+    //     loginEmail,
+    //     loginPass
+    //   );
+    //
+    //   if (regUser.user.email === "admin@admin.com") {
+    //     navigate("/Admin");
+    //   } else {
+    //     navigate("/home");
+    //   }
+    //   sessionStorage.setItem("Any_Key", regUser._tokenResponse.refreshToken);
+    // } catch (error) {
+    //   setError(true);
+    //   console.log(error);
+    // }
   };
 
   //const handleClose = (event, reason) => {
@@ -218,7 +214,7 @@ export default function SignIn() {
               <Grid container>
                 <Grid item>
                   <NavLink to="/sign-up">
-                    <Link href="#" variant="body2">
+                    <Link href="src/xxxxxx/NavBar/MenuBar/SignIn#" variant="body2">
                       Don't have an account? Sign Up
                     </Link>
                   </NavLink>

@@ -1,26 +1,11 @@
-import React, { useContext } from "react";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import {db} from "../../firebase";
-import {
-  arrayUnion,
-  collection,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "@firebase/firestore";
-import ProductsContext from "context/ProductsContext";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUserId, setUserCart } from "store/slices/userSlices";
-import { makeStyles } from "@mui/styles";
+import React from "react";
+import {Button, Card, CardActions, CardContent, CardMedia, Typography,} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import {db} from "../firebase";
+import {arrayUnion, collection, getDocs, query, updateDoc, where,} from "@firebase/firestore";
+import {useDispatch, useSelector} from "react-redux";
+import {selectUserId, setUserCart} from "store/slices/userSlices";
+import {makeStyles} from "@mui/styles";
 
 const useStyle = makeStyles({
   card: {
@@ -55,20 +40,20 @@ const useStyle = makeStyles({
   },
 });
 
-const Items = ({ items, referance }) => {
+const Items = ({items, referance}) => {
   const classes = useStyle();
   const userId = useSelector(selectUserId);
 
-  const { setItemPrice, setItemDescr, setItemImage, setProdItem } =
-    useContext(ProductsContext);
+  // const {setItemPrice, setItemDescr, setItemImage, setProdItem} =
+  //   useContext(ProductsContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onAddproducts = (item) => {
-    setItemPrice(item.price);
-    setItemDescr(item.description);
-    setItemImage(item.ProductImage);
-    setProdItem(item);
+    // setItemPrice(item.price);
+    // setItemDescr(item.description);
+    // setItemImage(item.ProductImage);
+    // setProdItem(item);
     navigate(`/products/${item.itemName}`);
   };
 
@@ -83,7 +68,7 @@ const Items = ({ items, referance }) => {
     const q = query(response, where("userRef", "==", userRef));
     const data = await getDocs(q);
     let ref = data.docs[0].ref;
-    await updateDoc(ref, { items: arrayUnion(itemRef) });
+    await updateDoc(ref, {items: arrayUnion(itemRef)});
 
     const newData = await getDocs(q);
 
@@ -99,21 +84,21 @@ const Items = ({ items, referance }) => {
 
   return (
     <div>
-      <Card className={classes.card} style={{ transition: "all .3s" }}>
+      <Card className={classes.card} style={{transition: "all .3s"}}>
         <CardMedia
           component="img"
           alt="Pic"
           image={items.ProductImage}
           onClick={() => onAddproducts(items)}
           className={classes.cardMedia}
-          sx={{ height: 200, objectFit: "fill", width: "200px" }}
+          sx={{height: 200, objectFit: "fill", width: "200px"}}
         />
-        <CardContent sx={{ p: 0, textAlign: "center" }}>
+        <CardContent sx={{p: 0, textAlign: "center"}}>
           <Typography gutterBottom variant="p" component="div">
             {items.itemName}
           </Typography>
         </CardContent>
-        <CardContent sx={{ p: 0 }}>
+        <CardContent sx={{p: 0}}>
           <Typography gutterBottom variant="h5" component="div">
             {items.price} AMD
           </Typography>

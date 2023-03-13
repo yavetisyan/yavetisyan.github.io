@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,13 +9,9 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { NavLink, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection, doc, setDoc } from "@firebase/firestore";
-import { setUserCart } from "store/slices/userSlices";
-import { useDispatch } from "react-redux";
-import {auth, db} from '../../../../firebase'
+import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {NavLink, useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
 
 function Copyright(props) {
   return (
@@ -26,7 +22,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="#">
+      <Link color="inherit" href="src/xxxxxx/NavBar/MenuBar/SignUp#">
         ACA PROJECT SHOP
       </Link>{" "}
       {new Date().getFullYear()}
@@ -47,35 +43,35 @@ export default function SignUp() {
   const register = async (e) => {
     e.preventDefault();
 
-    const regUser = await createUserWithEmailAndPassword(
-      auth,
-      regEmail,
-      regPass
-    );
-
-    await setDoc(doc(db, "users", regUser.user.uid), {
-      name: firstName,
-      surname: lastName,
-      email: regEmail,
-    });
-
-    const userRef = doc(db, "users", regUser.user.uid);
-
-    const cart = await addDoc(collection(db, "cart"), {
-      userRef,
-      items: [],
-    });
-
-    dispatch(setUserCart({ items: [], userRef, id: cart.uid }));
-
-    navigate("/home");
+    // const regUser = await createUserWithEmailAndPassword(
+    //   auth,
+    //   regEmail,
+    //   regPass
+    // );
+    //
+    // await setDoc(doc(db, "users", regUser.user.uid), {
+    //   name: firstName,
+    //   surname: lastName,
+    //   email: regEmail,
+    // });
+    //
+    // const userRef = doc(db, "users", regUser.user.uid);
+    //
+    // const cart = await addDoc(collection(db, "cart"), {
+    //   userRef,
+    //   items: [],
+    // });
+    //
+    // dispatch(setUserCart({items: [], userRef, id: cart.uid}));
+    //
+    // navigate("/home");
   };
 
   return (
     <ThemeProvider theme={theme}>
       <div className="sectionContainer signUpTitle">
         <Container component="main" maxWidth="xs">
-          <CssBaseline />
+          <CssBaseline/>
           <Box
             sx={{
               marginTop: 8,
@@ -84,13 +80,13 @@ export default function SignUp() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
+            <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
+              <LockOutlinedIcon/>
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
-            <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Box component="form" noValidate sx={{mt: 3}}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -143,7 +139,7 @@ export default function SignUp() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{mt: 3, mb: 2}}
                 onClick={register}
               >
                 Sign Up
@@ -151,7 +147,7 @@ export default function SignUp() {
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <NavLink to="/sign-in">
-                    <Link href="#" variant="body2">
+                    <Link href="src/xxxxxx/NavBar/MenuBar/SignUp#" variant="body2">
                       Already have an account? Sign in
                     </Link>
                   </NavLink>
@@ -159,7 +155,7 @@ export default function SignUp() {
               </Grid>
             </Box>
           </Box>
-          <Copyright sx={{ mt: 5 }} />
+          <Copyright sx={{mt: 5}}/>
         </Container>
       </div>
     </ThemeProvider>
