@@ -2,8 +2,8 @@
 import React from "react";
 import "./App.css";
 import {Route, Routes} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {selectUserId} from "./store/slices/userSlices";
+import {useDispatch} from "react-redux";
+import {removeUser, setUser} from "./store/slices/userSlices";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
@@ -16,10 +16,32 @@ import Admin from "./pages/Admin";
 import Cart from "./components/Cart";
 import NotfundPage from "./components/NotfundPage";
 import {ProductionQuantityLimitsSharp} from "@mui/icons-material";
+import {onAuthStateChanged} from "firebase/auth";
+import {auth} from "./firebase";
 
 function App() {
-  const userId = useSelector(selectUserId);
+  const dispatch = useDispatch()
 
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid;
+      dispatch(setUser({
+        displayName: user.displayName,
+        email: user.email,
+        uid: user.uid,
+        photoURL: user.photoURL,
+        token: user.accessToken,
+      }))
+      console.log(user)
+    } else {
+      // User is signed out
+      // ...
+      dispatch(removeUser())
+    }
+  });
+  
   return (
 
     <Routes>

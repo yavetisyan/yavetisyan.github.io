@@ -56,7 +56,7 @@ a:hover {
 .sectionContainer {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 120px 15px 40px 15px;
+    padding: 0 40px 15px;
 }
 
 .link,
@@ -483,9 +483,9 @@ input:focus {
 
 /*payment*/
 
-.signUpTitle {
-    min-height: 80vh;
-}
+/*.signUpTitle {*/
+/*    min-height: 80vh;*/
+/*}*/
 
 /*footer */
 

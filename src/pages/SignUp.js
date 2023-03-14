@@ -11,7 +11,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {NavLink, useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {auth, db} from "../firebase";
+import {createUserWithEmailAndPassword} from "firebase/auth";
+import {setUser} from "../store/slices/userSlices";
+import {doc, setDoc} from "@firebase/firestore";
 
 function Copyright(props) {
   return (
@@ -34,38 +38,46 @@ const theme = createTheme();
 
 export default function SignUp() {
   const dispatch = useDispatch();
+  const userID = useSelector(state => state.uid)
   const navigate = useNavigate();
   const [regEmail, setRegEmail] = useState("");
   const [regPass, setRegPass] = useState("");
+  const [regConfirmPass, setRegConfirmPass] = useState("");
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
+  const [cred, setCred] = useState({})
+
 
   const register = async (e) => {
     e.preventDefault();
 
-    // const regUser = await createUserWithEmailAndPassword(
-    //   auth,
-    //   regEmail,
-    //   regPass
-    // );
-    //
-    // await setDoc(doc(db, "users", regUser.user.uid), {
-    //   name: firstName,
-    //   surname: lastName,
-    //   email: regEmail,
-    // });
-    //
-    // const userRef = doc(db, "users", regUser.user.uid);
-    //
-    // const cart = await addDoc(collection(db, "cart"), {
-    //   userRef,
-    //   items: [],
-    // });
-    //
-    // dispatch(setUserCart({items: [], userRef, id: cart.uid}));
-    //
-    // navigate("/home");
+    try {
+      if (regPass === regConfirmPass) {
+        await createUserWithEmailAndPassword(auth, regEmail, regPass)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            dispatch(setUser({
+              email: user.email,
+              uid: user.uid,
+              token: user.accessToken
+            }))
+            setDoc(doc(db, "users", user.email), {
+              firstName,
+              lastName,
+              regEmail,
+              uid: user.uid
+            });
+          })
+      } else (
+        alert('password not match')
+      )
+
+    } catch (e) {
+      console.log('Sign up error -', e.message)
+    }
   };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -134,6 +146,18 @@ export default function SignUp() {
                     onChange={(e) => setRegPass(e.target.value)}
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    id="confirmPassword"
+                    autoComplete="new-password"
+                    onChange={(e) => setRegConfirmPass(e.target.value)}
+                  />
+                </Grid>
               </Grid>
               <Button
                 type="submit"
@@ -147,15 +171,12 @@ export default function SignUp() {
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <NavLink to="/sign-in">
-                    <Link href="src/xxxxxx/NavBar/MenuBar/SignUp#" variant="body2">
-                      Already have an account? Sign in
-                    </Link>
+                    Already have an account? Sign in
                   </NavLink>
                 </Grid>
               </Grid>
             </Box>
           </Box>
-          <Copyright sx={{mt: 5}}/>
         </Container>
       </div>
     </ThemeProvider>

@@ -1,12 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
   email: null,
   displayName: null,
   uid: null,
   token: null,
-  isAutheinticating: true,
+  isAuth: false,
   cart: null,
+  photoURL: null
 };
 
 const userSlice = createSlice({
@@ -18,7 +19,8 @@ const userSlice = createSlice({
       state.token = action.payload?.token;
       state.displayName = action.payload?.displayName;
       state.uid = action.payload?.uid;
-      state.isAutheinticating = false;
+      state.isAuth = true;
+      state.photoURL = action.payload?.photoURL
     },
     setUserCart(state, action) {
       state.cart = action.payload;
@@ -28,11 +30,13 @@ const userSlice = createSlice({
       state.email = null;
       state.uid = null;
       state.cart = null;
+      state.isAuth = false
+      state.toke = null
     },
   },
 });
 
-export const { setUser, removeUser, setUserCart } = userSlice.actions;
+export const {setUser, removeUser, setUserCart} = userSlice.actions;
 export const selectUser = (s) => s.user;
 export const selectEmail = (e) => e.email;
 export const selectUserAuth = (s) => s.user.isAutheinticating;

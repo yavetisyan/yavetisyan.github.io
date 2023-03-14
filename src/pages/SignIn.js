@@ -13,6 +13,9 @@ import {NavLink, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import ScrollToTop from "components/ScrollToTop";
 import {makeStyles} from "@mui/styles";
+import {auth} from "../firebase";
+import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
+import {setUser} from "../store/slices/userSlices";
 
 const useStyle = makeStyles({
   box: {
@@ -33,33 +36,48 @@ export default function SignIn() {
   const [, setOpen] = useState(false);
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
+  const provider = new GoogleAuthProvider();
+  provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
-  //get data
-  const getData = async () => {
-    // try {
-    //   const users = await getDocs(collection(db, "users"));
-    //   const usersArray = [];
-    //   users.forEach((doc) => {
-    //     const obj = {
-    //       id: doc.id,
-    //       ...doc.data(),
-    //     };
-    //     usersArray.push(obj);
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  };
-  //
-  // useEffect(() => {
-  //   getData();
-  // }, []);
 
   //-------------------------
 
   const loginWithGoogle = async (e) => {
-    // e.preventDefault();
-    //
+    e.preventDefault();
+    try {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          // IdP data available using getAdditionalUserInfo(result)
+          dispatch(setUser({
+            displayName: user.displayName,
+            email: user.email,
+            uid: user.uid,
+            photoURL: user.photoURL,
+            token: user.accessToken,
+          }))
+          navigate('/home')
+          console.log(user)
+          // ...
+        }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+    } catch (e) {
+      console.log('Google signin error - ', e.message)
+    }
+
+
     // try {
     //   const provider = new GoogleAuthProvider();
     //   const googleUser = await signInWithPopup(auth, provider);
@@ -100,34 +118,29 @@ export default function SignIn() {
   };
 
   const loginWithEmail = async (e) => {
-    // e.preventDefault();
-    // setOpen(true);
-    // try {
-    //   const regUser = await signInWithEmailAndPassword(
-    //     auth,
-    //     loginEmail,
-    //     loginPass
-    //   );
-    //
-    //   if (regUser.user.email === "admin@admin.com") {
-    //     navigate("/Admin");
-    //   } else {
-    //     navigate("/home");
-    //   }
-    //   sessionStorage.setItem("Any_Key", regUser._tokenResponse.refreshToken);
-    // } catch (error) {
-    //   setError(true);
-    //   console.log(error);
-    // }
+    e.preventDefault();
+
+    try {
+      signInWithEmailAndPassword(auth, loginEmail, loginPass).then((userCredential) => {
+        const user = userCredential.user
+        dispatch(setUser({
+          email: user.email,
+          token: user.accessToken,
+          uid: user.uid,
+          isAuth: true
+        }))
+        console.log(user)
+        navigate('/home')
+
+      })
+
+    } catch (e) {
+      console.log('Login error', e.message())
+    }
+
+
   };
 
-  //const handleClose = (event, reason) => {
-  //  if (reason === "clickaway") {
-  //    return;
-  //  }
-
-  //  setOpen(false);
-  //};
 
   return (
     <ThemeProvider theme={theme}>
@@ -144,7 +157,7 @@ export default function SignIn() {
                 <>
                   <TextField
                     margin="normal"
-                    required
+                    required={true}
                     fullWidth
                     id="email"
                     label="Email Address"

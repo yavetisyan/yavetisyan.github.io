@@ -13,8 +13,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {Link, NavLink, useNavigate} from "react-router-dom";
 //import logo from "./logo.png";
 import {Button} from "@mui/material";
-import {useSelector} from "react-redux";
-import {selectUserCart, selectUserId} from "../store/slices/userSlices";
+import {useDispatch, useSelector} from "react-redux";
+import {removeUser, selectUserCart, selectUserId} from "../store/slices/userSlices";
 import {signOut} from "firebase/auth";
 import {makeStyles} from "@mui/styles";
 import Container from "@mui/material/Container";
@@ -60,6 +60,7 @@ const useStyles = makeStyles({
 export default function Navbar() {
   // const {googleProfileImg} = useContext(AdminContext);
   // const {setGetCatName} = useContext(CategoriesContext);
+  const dispatch = useDispatch()
   const classes = useStyles();
   const userId = useSelector(selectUserId);
   const navigate = useNavigate();
@@ -68,6 +69,8 @@ export default function Navbar() {
 
   const onLogoutClick = async () => {
     await signOut(auth);
+    dispatch(removeUser())
+    localStorage.clear();
     navigate("/home");
   };
 
