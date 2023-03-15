@@ -68,6 +68,7 @@ export default function SignUp() {
               regEmail,
               uid: user.uid
             });
+            navigate('/')
           })
       } else (
         alert('password not match')

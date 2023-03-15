@@ -65,7 +65,7 @@ export default function Navbar() {
   const userId = useSelector(selectUserId);
   const navigate = useNavigate();
   const {items = []} = useSelector(selectUserCart) || {};
-  const pages = ["admin", "home", "boys", "girls", "accessories", "contactUs"]
+  const pages = ["admin", "home", "boys", "girls", "accessories", "contactUs", "users"]
 
   const onLogoutClick = async () => {
     await signOut(auth);

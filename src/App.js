@@ -18,6 +18,7 @@ import NotfundPage from "./components/NotfundPage";
 import {ProductionQuantityLimitsSharp} from "@mui/icons-material";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth} from "./firebase";
+import Users from "./pages/Users";
 
 function App() {
   const dispatch = useDispatch()
@@ -27,6 +28,7 @@ function App() {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
       const uid = user.uid;
+
       dispatch(setUser({
         displayName: user.displayName,
         email: user.email,
@@ -41,7 +43,7 @@ function App() {
       dispatch(removeUser())
     }
   });
-  
+
   return (
 
     <Routes>
@@ -54,10 +56,11 @@ function App() {
         <Route path="/accessories" element={<ForAccessories/>}/>
         <Route path="/contactus" element={<ContactUs/>}/>
         {/*{userId === "1Hxk22s9WCc0MSOmbOqI3lPYKzE2" && (*/}
-        <Route path="/Admin" element={<Admin/>}/>
+        <Route path="/admin" element={<Admin/>}/>
         {/*)}*/}
         {/*{userId && <Route path="/Cart" element={<Cart/>}/>}*/}
-        <Route path="/Cart" element={<Cart/>}/>}
+        <Route path="/cart" element={<Cart/>}/>}
+        <Route path="/users" element={<Users/>}/>}
         <Route path="*" element={<NotfundPage/>}/>
         <Route path={`products/:itemName`} element={<ProductionQuantityLimitsSharp/>}/>
       </Route>
