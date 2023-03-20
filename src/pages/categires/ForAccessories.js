@@ -1,7 +1,7 @@
 import React from "react";
-import AddCategories from "../components/AddCategories";
+import AddCategories from "../../components/AddCategories";
 
-const ForGirls = () => {
+const ForAccessories = () => {
 
   return (
     <div className="sectionContainer">
@@ -10,4 +10,4 @@ const ForGirls = () => {
   );
 };
 
-export default ForGirls;
+export default ForAccessories;

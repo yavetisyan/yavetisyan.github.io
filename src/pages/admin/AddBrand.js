@@ -1,7 +1,9 @@
+import React, {useState} from "react";
 import {Box, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import {makeStyles} from "@mui/styles";
-import React, {useState} from "react";
+import {setDoc, doc} from "firebase/firestore";
+import {db} from "../../firebase";
 
 const useStyle = makeStyles({
   brandBox: {
@@ -15,19 +17,20 @@ const useStyle = makeStyles({
 
 function AddBrand() {
   const classes = useStyle();
-  const [productName, setProductName] = useState("");
+  const [brandName, setBrandName] = useState("");
 
   // add brand
-  const onAddBrand = async (id) => {
-    // const brandRef = collection(db, "brands");
-    // const payload = {
-    //   name: productName,
-    //   brandName: productName,
-    // };
-    //
-    // payload.name ? await addDoc(brandRef, payload) : alert("Enter Value");
-    //
-    // setProductName("");
+  const onAddBrand = async () => {
+    try {
+      await setDoc(doc(db, "brands", brandName), {
+        name: brandName.toUpperCase(),
+        value: brandName.toUpperCase()
+      });
+      setBrandName('')
+    } catch (e) {
+      console.log('Add brand error - ', e)
+    }
+
   };
 
   return (
@@ -47,8 +50,8 @@ function AddBrand() {
           placeholder="Brand name"
           variant="filled"
           autoComplete="off"
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
+          value={brandName}
+          onChange={(e) => setBrandName(e.target.value)}
         />
         <Button
           variant="contained"

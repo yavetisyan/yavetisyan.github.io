@@ -28,7 +28,7 @@ const CartPayment = ({open, onclose, emptyCart}) => {
 
       setTimeout(() => {
         emptyCart();
-        navigate("/home");
+        navigate("/");
       }, 1000);
     }
   };

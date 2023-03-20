@@ -13,9 +13,10 @@ import {NavLink, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import ScrollToTop from "components/ScrollToTop";
 import {makeStyles} from "@mui/styles";
-import {auth} from "../firebase";
 import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
-import {setUser} from "../store/slices/userSlices";
+import {auth} from "../../firebase";
+import {setUser} from "../../store/slices/userSlices";
+
 
 const useStyle = makeStyles({
   box: {
@@ -60,7 +61,7 @@ export default function SignIn() {
             photoURL: user.photoURL,
             token: user.accessToken,
           }))
-          navigate('/home')
+          navigate('/')
           console.log(user)
           // ...
         }).catch((error) => {
@@ -130,7 +131,7 @@ export default function SignIn() {
           isAuth: true
         }))
         console.log(user)
-        navigate('/home')
+        navigate('/')
 
       })
 

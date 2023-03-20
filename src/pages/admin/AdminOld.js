@@ -13,12 +13,13 @@ import Stack from "@mui/material/Stack";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {DataGrid} from "@mui/x-data-grid";
 import {collection, getDocs} from "@firebase/firestore";
-import {db} from "../firebase";
-import {Container, TextareaAutosize} from "@mui/material";
-import EditItemDialog from "../components/EditItemDialog";
-import DeletIetemDialog from "../components/DeleteItemDialog";
-import AddBrand from "../components/AddBrand";
 import {makeStyles} from "@mui/styles";
+import Container from "@mui/material/Container";
+import AddBrand from "../../components/AddBrand";
+import {TextareaAutosize} from "@mui/material";
+import {db} from "../../firebase";
+import EditItemDialog from "../../components/EditItemDialog";
+import DeleteIetemDialog from "../../components/DeleteItemDialog";
 
 
 const useStyle = makeStyles({
@@ -52,7 +53,7 @@ const useStyle = makeStyles({
   },
 });
 
-const Admin = () => {
+const AdminOld = () => {
   const classes = useStyle(0);
   let formId = 1;
 
@@ -386,7 +387,7 @@ const Admin = () => {
               />
             </div>
 
-            <div clasname={classes.showImage}>
+            <div clasName={classes.showImage}>
               <Stack direction="row" alignItems="center" spacing={2}>
                 <label htmlFor="icon-button-file">
                   <Input
@@ -552,10 +553,12 @@ const Admin = () => {
       )}
 
       {deleteRow && (
-        <DeletIetemDialog item={deleteRow} onClose={() => setDeleteRow(null)}/>
+        <DeleteIetemDialog item={deleteRow} onClose={() => setDeleteRow(null)}/>
       )}
+
     </Container>
   );
 };
 
-export default Admin;
+export default AdminOld;
+

@@ -12,10 +12,11 @@ import Container from "@mui/material/Container";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {NavLink, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {auth, db} from "../firebase";
 import {createUserWithEmailAndPassword} from "firebase/auth";
-import {setUser} from "../store/slices/userSlices";
 import {doc, setDoc} from "@firebase/firestore";
+import {auth, db} from "../../firebase";
+import {setUser} from "../../store/slices/userSlices";
+
 
 function Copyright(props) {
   return (

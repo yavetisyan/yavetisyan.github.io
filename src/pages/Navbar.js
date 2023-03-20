@@ -65,13 +65,13 @@ export default function Navbar() {
   const userId = useSelector(selectUserId);
   const navigate = useNavigate();
   const {items = []} = useSelector(selectUserCart) || {};
-  const pages = ["admin", "home", "boys", "girls", "accessories", "contactUs", "users"]
+  const pages = ["admin", "home", "boys", "girls", "accessories", "contactUs"]
 
   const onLogoutClick = async () => {
     await signOut(auth);
     dispatch(removeUser())
     localStorage.clear();
-    navigate("/home");
+    navigate("/");
   };
 
 
@@ -103,7 +103,7 @@ export default function Navbar() {
             component="div"
             sx={{mr: 2, display: {xs: "none", md: "flex"}}}
           >
-            <Link to="/home">
+            <Link to="/">
               <img
                 src="https://dypdvfcjkqkg2.cloudfront.net/large/6619058-9743.png"
                 alt="Logo"

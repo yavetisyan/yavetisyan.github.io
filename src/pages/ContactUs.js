@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import emailjs from "@emailjs/browser";
-import { init } from "@emailjs/browser";
+import {init} from "@emailjs/browser";
+
 init("user_LVwaNrHvAvjKnEkcWJ5qe");
 
 const ContactUs = () => {
@@ -32,6 +33,7 @@ const ContactUs = () => {
   setTimeout(() => {
     showResult(false);
   }, 5000);
+
 
   return (
     <div className="contact__us">
@@ -87,7 +89,7 @@ const ContactUs = () => {
                   name="txtMsg"
                   className="form-control"
                   placeholder="Your Message *"
-                  style={{ width: "100%", height: "150px" }}
+                  style={{width: "100%", height: "150px"}}
                   required
                 ></textarea>
               </div>
