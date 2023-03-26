@@ -50,7 +50,7 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Main/>}>
-        <Route index path='/home' element={<Home/>}/>
+        <Route index element={<Home/>}/>
         <Route path="/sign-in" element={<SignIn/>}/>
         <Route path="/sign-up" element={<SignUp/>}/>
         <Route path="/boys" element={<ForBoys/>}/>

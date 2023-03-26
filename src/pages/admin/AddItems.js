@@ -7,19 +7,22 @@ import {db, storage} from "../../firebase";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import {categoriesList} from "../../utilites/categories";
+import FormControl from "@mui/material/FormControl";
 
 const AddItems = () => {
   const classes = addItemsStyles()
   const [file, setFile] = useState("");
   const [imageRef, setImageRef] = useState('');
-
+  const [categories, setCategories] = useState("");
   const [allBrands, setAllBrands] = useState([])
   const [open, setOpen] = useState(false);
+  const [openCategories, setOpenCategories] = useState(false);
   const [brandName, setBrandName] = useState("");
   const [brandList, setBrandList] = useState([]);
   const [addItems, setAddItems] = useState('')
-  const [itemName, setItemName] = useState(0)
-  const [itemPrice, setItemPrice] = useState()
+  const [itemName, setItemName] = useState('')
+  const [itemPrice, setItemPrice] = useState(0)
   const [textarea, setTextarea] = useState('')
   const [per, setPer] = useState(null);
 
@@ -58,17 +61,14 @@ const AddItems = () => {
     }
   }, []);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
   const onChangeBrand = async (e) => {
     setBrandName(e.target.value)
 
+  }
+
+  const handleClear = (e) => {
+    e.preventDefault();
+    setFile('')
   }
 
   const uploadFile = () => {
@@ -108,14 +108,16 @@ const AddItems = () => {
 
   const handleAdd = async (e) => {
     e.preventDefault();
-    uploadFile();
     try {
+
       const docRef = await addDoc(collection(db, "items"), {
-        Name: itemName,
-        Price: itemPrice,
-        Text: textarea,
-        BrandName: brandName,
-        Image: imageRef
+        name: itemName,
+        price: itemPrice,
+        text: textarea,
+        brandName: brandName,
+        image: imageRef,
+        categories: categories
+
       });
 
       setItemPrice(0);
@@ -124,6 +126,7 @@ const AddItems = () => {
       setBrandName('');
       setFile('');
       setImageRef('');
+      setCategories('')
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -136,8 +139,8 @@ const AddItems = () => {
       <div>
         <form>
 
-          <input type="text" placeholder='Item Name' onChange={(e) => setItemName(e.target.value)}/>
-          <input type="number" placeholder='Price' onChange={(e) => setItemPrice(e.target.value)}/>
+          <input type="text" placeholder='Item Name' value={itemName} onChange={(e) => setItemName(e.target.value)}/>
+          <input type="number" placeholder='Price' value={itemPrice} onChange={(e) => setItemPrice(e.target.value)}/>
 
           <div>
             <InputLabel id="demo-controlled-open-select-label">
@@ -147,10 +150,11 @@ const AddItems = () => {
               labelId="demo-controlled-open-select-label"
               id="demo-controlled-open-select"
               open={open}
-              onClose={handleClose}
-              onOpen={handleOpen}
+              onClose={(e) => setOpen(false)}
+              onOpen={(e) => setOpen(true)}
+              label="Brand"
+
               value={brandName}
-              label="Brand name"
               onChange={onChangeBrand}
             >
               <MenuItem value="">
@@ -164,7 +168,33 @@ const AddItems = () => {
             </Select>
           </div>
 
-          <textarea type="text" placeholder='Enter Desctiption' rows='10' cols='80'
+          <div style={{
+            width: '150px',
+            marginTop: '20px'
+          }}>
+            <FormControl fullWidth>
+              <InputLabel>Categories</InputLabel>
+              <Select
+                open={openCategories}
+                onClose={(e) => setOpenCategories(false)}
+                onOpen={(e) => setOpenCategories(true)}
+                value={categories}
+                label="Categories"
+                onChange={(e) => setCategories(e.target.value)}
+              >
+                <MenuItem value="a">
+                  <em>None</em>
+                </MenuItem>
+                {categoriesList.map((list) => (
+                  <MenuItem key={list.categories} value={list.categories}>
+                    {list.categories}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+          </div>
+          <textarea placeholder='Enter Desctiption' rows='10' cols='80' value={textarea}
                     onChange={(e) => setTextarea(e.target.value)}/>
           <div>
             <div className="left">
@@ -179,7 +209,7 @@ const AddItems = () => {
             </div>
 
             <input type="file" onChange={(e) => setFile(e.target.files[0])}/>
-            <button onClick={() => setFile('')}>Clear image</button>
+            <button onClick={handleClear}>Clear image</button>
 
           </div>
 

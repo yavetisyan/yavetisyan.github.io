@@ -20,6 +20,7 @@ import {makeStyles} from "@mui/styles";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import {auth} from "../firebase";
+import {pages} from "../utilites/navbarNames";
 
 const useStyles = makeStyles({
   button: {
@@ -65,7 +66,6 @@ export default function Navbar() {
   const userId = useSelector(selectUserId);
   const navigate = useNavigate();
   const {items = []} = useSelector(selectUserCart) || {};
-  const pages = ["admin", "home", "boys", "girls", "accessories", "contactUs"]
 
   const onLogoutClick = async () => {
     await signOut(auth);
@@ -142,10 +142,10 @@ export default function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.link} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
-                    <Link to={page} className={classes.menuItemLink}>
-                      {page}
+                    <Link to={page.link} className={classes.menuItemLink}>
+                      {page.name}
                     </Link>
                   </Typography>
                 </MenuItem>
@@ -171,7 +171,7 @@ export default function Navbar() {
             className="navMenu"
           >
             {pages.map((page) => (
-              <div key={page}>
+              <div key={page.link}>
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{
@@ -180,13 +180,13 @@ export default function Navbar() {
                   className={classes.button}
                 >
                   <NavLink
-                    to={`/${page}`}
+                    to={page.link}
                     className={({isActive}) =>
                       isActive ? "link_active" : "link"
                     }
-                    onClick={() => onAddPageName(page)}
+                    onClick={() => onAddPageName(page.link)}
                   >
-                    {page}
+                    {page.name}
                   </NavLink>
                 </Button>
               </div>
