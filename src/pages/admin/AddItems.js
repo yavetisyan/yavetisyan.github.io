@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {addItemsStyles} from "../../assets/styles";
-import {collection, addDoc, getDocs, serverTimestamp, onSnapshot} from "firebase/firestore";
-import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+import {addDoc, collection, getDocs, onSnapshot} from "firebase/firestore";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 
 import {db, storage} from "../../firebase";
 import InputLabel from "@mui/material/InputLabel";
@@ -9,9 +8,21 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {categoriesList} from "../../utilites/categories";
 import FormControl from "@mui/material/FormControl";
+import {Button} from "@mui/material";
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const AddItems = () => {
-  const classes = addItemsStyles()
   const [file, setFile] = useState("");
   const [imageRef, setImageRef] = useState('');
   const [categories, setCategories] = useState("");
@@ -20,11 +31,15 @@ const AddItems = () => {
   const [openCategories, setOpenCategories] = useState(false);
   const [brandName, setBrandName] = useState("");
   const [brandList, setBrandList] = useState([]);
-  const [addItems, setAddItems] = useState('')
+  // const [addItems, setAddItems] = useState('')
   const [itemName, setItemName] = useState('')
   const [itemPrice, setItemPrice] = useState(0)
   const [textarea, setTextarea] = useState('')
   const [per, setPer] = useState(null);
+
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
 
   useEffect(() => {
@@ -72,9 +87,9 @@ const AddItems = () => {
   }
 
   const uploadFile = () => {
+    setOpenModal(true)
     // const name = new Date().getTime() + file.name;
-    const storageRef = ref(storage
-      , file.name);
+    const storageRef = ref(storage, file.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -84,6 +99,7 @@ const AddItems = () => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log("Upload is " + progress + "% done");
         setPer(progress);
+
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -101,6 +117,9 @@ const AddItems = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageRef(downloadURL);
+          setOpenModal(false)
+          console.log('File available at', downloadURL);
+
         });
       }
     );
@@ -108,12 +127,14 @@ const AddItems = () => {
 
   const handleAdd = async (e) => {
     e.preventDefault();
+    await uploadFile();
     try {
 
-      const docRef = await addDoc(collection(db, "items"), {
+
+      await addDoc(collection(db, "items"), {
         name: itemName,
         price: itemPrice,
-        text: textarea,
+        description: textarea,
         brandName: brandName,
         image: imageRef,
         categories: categories
@@ -127,7 +148,7 @@ const AddItems = () => {
       setFile('');
       setImageRef('');
       setCategories('')
-      console.log("Document written with ID: ", docRef.id);
+
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -138,67 +159,72 @@ const AddItems = () => {
       <h1>Add Items</h1>
       <div>
         <form>
+          <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center'}}>
+            <input type="text" placeholder='Item Name' value={itemName} onChange={(e) => setItemName(e.target.value)}/>
+            <input type="number" placeholder='Price' value={itemPrice} onChange={(e) => setItemPrice(e.target.value)}/>
+            <div style={{
+              width: '150px',
+              marginTop: '20px'
+            }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-controlled-open-select-label">
+                  Brand name
+                </InputLabel>
+                <Select
+                  labelId="demo-controlled-open-select-label"
+                  id="demo-controlled-open-select"
+                  open={open}
+                  onClose={(e) => setOpen(false)}
+                  onOpen={(e) => setOpen(true)}
+                  label="Brand"
 
-          <input type="text" placeholder='Item Name' value={itemName} onChange={(e) => setItemName(e.target.value)}/>
-          <input type="number" placeholder='Price' value={itemPrice} onChange={(e) => setItemPrice(e.target.value)}/>
-
-          <div>
-            <InputLabel id="demo-controlled-open-select-label">
-              Brand name
-            </InputLabel>
-            <Select
-              labelId="demo-controlled-open-select-label"
-              id="demo-controlled-open-select"
-              open={open}
-              onClose={(e) => setOpen(false)}
-              onOpen={(e) => setOpen(true)}
-              label="Brand"
-
-              value={brandName}
-              onChange={onChangeBrand}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {brandList.map((brand, index) => (
-                <MenuItem value={brand.id} key={brand.id}>
-                  {brand.id}
-                </MenuItem>
-              ))}
-            </Select>
-          </div>
-
-          <div style={{
-            width: '150px',
-            marginTop: '20px'
-          }}>
-            <FormControl fullWidth>
-              <InputLabel>Categories</InputLabel>
-              <Select
-                open={openCategories}
-                onClose={(e) => setOpenCategories(false)}
-                onOpen={(e) => setOpenCategories(true)}
-                value={categories}
-                label="Categories"
-                onChange={(e) => setCategories(e.target.value)}
-              >
-                <MenuItem value="a">
-                  <em>None</em>
-                </MenuItem>
-                {categoriesList.map((list) => (
-                  <MenuItem key={list.categories} value={list.categories}>
-                    {list.categories}
+                  value={brandName}
+                  onChange={onChangeBrand}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
                   </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  {brandList.map((brand, index) => (
+                    <MenuItem value={brand.id} key={brand.id}>
+                      {brand.id}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
 
+            <div style={{
+              width: '150px',
+              marginTop: '20px'
+            }}>
+              <FormControl fullWidth>
+                <InputLabel>Categories</InputLabel>
+                <Select
+                  open={openCategories}
+                  onClose={(e) => setOpenCategories(false)}
+                  onOpen={(e) => setOpenCategories(true)}
+                  value={categories}
+                  label="Categories"
+                  onChange={(e) => setCategories(e.target.value)}
+                >
+                  <MenuItem value="a">
+                    <em>None</em>
+                  </MenuItem>
+                  {categoriesList.map((list) => (
+                    <MenuItem key={list.categories} value={list.categories}>
+                      {list.categories}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
           </div>
           <textarea placeholder='Enter Desctiption' rows='10' cols='80' value={textarea}
                     onChange={(e) => setTextarea(e.target.value)}/>
           <div>
             <div className="left">
               <img
+                style={{width: 100}}
                 src={
                   file
                     ? URL.createObjectURL(file)
@@ -209,16 +235,52 @@ const AddItems = () => {
             </div>
 
             <input type="file" onChange={(e) => setFile(e.target.files[0])}/>
-            <button onClick={handleClear}>Clear image</button>
+            <Button variant={'contained'} onClick={uploadFile}>Add image</Button>
+            <Button variant={'contained'} onClick={handleClear}>Clear image</Button>
 
           </div>
 
-          <button onClick={handleAdd}>Add Item</button>
+          <Button variant={'contained'} onClick={handleAdd}>Add Item</Button>
 
 
         </form>
       </div>
+      {/*{openModal && (*/}
+      {/*  <div>*/}
+
+      {/*    <Modal*/}
+      {/*      open={openModal}*/}
+      {/*      onClose={handleClose}*/}
+      {/*      aria-labelledby="modal-modal-title"*/}
+      {/*      aria-describedby="modal-modal-description"*/}
+      {/*    >*/}
+      {/*      <Box sx={style}>*/}
+      {/*        <Box sx={{position: 'relative', display: 'inline-flex'}}>*/}
+      {/*          <CircularProgress variant="determinate"/>*/}
+      {/*          <Box*/}
+      {/*            sx={{*/}
+      {/*              top: 0,*/}
+      {/*              left: 0,*/}
+      {/*              bottom: 0,*/}
+      {/*              right: 0,*/}
+      {/*              position: 'absolute',*/}
+      {/*              display: 'flex',*/}
+      {/*              alignItems: 'center',*/}
+      {/*              justifyContent: 'center',*/}
+      {/*            }}*/}
+      {/*          >*/}
+      {/*            <Typography variant="caption" component="div" color="text.secondary">*/}
+      {/*              {`${per} %`}*/}
+      {/*            </Typography>*/}
+      {/*          </Box>*/}
+      {/*        </Box>*/}
+      {/*      </Box>*/}
+      {/*    </Modal>*/}
+      {/*  </div>*/}
+      {/*)}*/}
     </div>
+
+
   );
 };
 

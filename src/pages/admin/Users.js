@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Button, CircularProgress} from "@mui/material";
-import {doc, deleteDoc, collection, onSnapshot} from "firebase/firestore";
+import {collection, deleteDoc, doc, onSnapshot} from "firebase/firestore";
 import {deleteUser} from "firebase/auth";
 import {auth, db} from "../../firebase";
 import {Box} from "@mui/system";
@@ -33,7 +33,7 @@ const Users = () => {
       unsub()
     }
   }, [])
-  console.log(users)
+
   const handleDelete = async (id) => {
     const user = auth;
     console.log(user)

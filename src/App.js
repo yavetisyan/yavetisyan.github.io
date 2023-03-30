@@ -21,6 +21,7 @@ import Admin from "./pages/admin/Admin";
 import Users from "./pages/admin/Users";
 import AddBrand from "./pages/admin/AddBrand";
 import AddItems from "./pages/admin/AddItems";
+import AllItems from "./pages/admin/AllItems";
 
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
         photoURL: user.photoURL,
         token: user.accessToken,
       }))
-      console.log(user)
+      // console.log(user)
     } else {
       // User is signed out
       // ...
@@ -62,10 +63,11 @@ function App() {
           <Route index element={<Users/>}/>
           <Route path='/admin//add-brands' element={<AddBrand/>}/>
           <Route path='/admin/add-items' element={<AddItems/>}/>
+          <Route path='/admin/all-items' element={<AllItems/>}/>
         </Route>
         {/*)}*/}
         {/*{userId && <Route path="/Cart" element={<Cart/>}/>}*/}
-        <Route path="/cart" element={<Cart/>}/>}
+        <Route path="/cart" element={<Cart/>}/>
         {/*<Route index path="/users" element={<Users/>}/>}*/}
         <Route path="*" element={<NotfundPage/>}/>
         <Route path={`products/:itemName`} element={<ProductionQuantityLimitsSharp/>}/>

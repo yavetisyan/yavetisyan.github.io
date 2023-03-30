@@ -145,7 +145,7 @@ function Cart() {
           <div className="title">Shopping Bag</div>
 
           {cartItems.map(({item, count}) => (
-            <div className="item">
+            <div className="item" key={count}>
               <div className="buttons">
                 <span
                   className="delete-btn"
