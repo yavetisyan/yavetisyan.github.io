@@ -3,12 +3,15 @@ import {DataGrid} from '@mui/x-data-grid';
 import Button from "@mui/material/Button";
 import {collection, onSnapshot} from "@firebase/firestore";
 import {db} from "../../firebase";
+import DeleteIetemDialog from "../../components/DeleteItemDialog";
+import EditItemDialog from "../../components/EditItemDialog";
 
 const AllItems = () => {
   let formId = 1;
   const [editingRow, setEditingRow] = useState(null);
   const [deleteRow, setDeleteRow] = useState(null);
   const [products, setProducts] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false)
 
   useEffect(() => {
     const getItems = onSnapshot(
@@ -33,16 +36,19 @@ const AllItems = () => {
 
   const onEditRow = (id) => {
     setEditingRow(id);
+    console.log(id)
   };
 
   const onDelete = (id) => {
     setDeleteRow(id);
+    console.log(id)
+
   };
 
   return (
     <div>
       <h2>All items</h2>
-      <div style={{height: 400, width: '100%', backgroundColor: '#fff', margin: "20px"}}>
+      <div style={{height: 600, width: '100%', backgroundColor: '#fff', margin: "20px"}}>
         <DataGrid
           onGridStateChange={console.log}
           sx={{maxWidth: "100%"}}
@@ -97,6 +103,7 @@ const AllItems = () => {
                price,
                description,
                image,
+               imageName,
                name,
                categories,
              }) => ({
@@ -108,11 +115,16 @@ const AllItems = () => {
               price,
               description,
               image,
+              imageName,
             })
           )}
         />
 
       </div>
+
+      {editingRow && <EditItemDialog item={editingRow} onClose={() => setEditingRow(null)}/>}
+      {deleteRow &&
+        <DeleteIetemDialog item={deleteRow} onClose={() => setDeleteRow(null)} onOpen={() => setOpenDialog(true)}/>}
     </div>
   );
 };

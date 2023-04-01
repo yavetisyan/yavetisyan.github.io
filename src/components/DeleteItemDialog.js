@@ -1,8 +1,10 @@
+import React from "react";
 import {Button, Container, Dialog, DialogActions, DialogTitle,} from "@mui/material";
-import React, {useCallback} from "react";
+import {doc, deleteDoc} from "firebase/firestore";
+import {ref, deleteObject} from "firebase/storage";
 
 import {makeStyles} from "@mui/styles";
-// import ProductsContext from "context/ProductsContext";
+import {db, storage} from "../firebase";
 
 const useStyle = makeStyles({
   dialogAction: {
@@ -11,38 +13,21 @@ const useStyle = makeStyles({
   },
 });
 
-function DeleteItemDialog({item, onClose}) {
+function DeleteItemDialog({item, onClose, onOpen}) {
   const classes = useStyle();
-  // const {setProducts} = useContext(ProductsContext);
-  const addProduct = useCallback(async () => {
-    // try {
-    //   const products = await getDocs(collection(db, "items"));
-    //   const productArray = [];
-    //   products.forEach((doc) => {
-    //     const obj = {
-    //       ...doc.data(),
-    //       id: doc.id,
-    //       cart: false,
-    //       ref: doc.ref,
-    //     };
-    //     productArray.push(obj);
-    //   });
-    //   // setProducts(productArray);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  }, []);
 
   const onDeleteItems = async (id) => {
-    // const docRef = doc(db, "items", id);
-    // await deleteDoc(docRef);
-    // addProduct();
-    // onClose();
+    const desertRef = ref(storage, `${item.categories} / ${item.imageName}`);
+    console.log(desertRef);
+    await deleteDoc(doc(db, 'items', id));
+    await deleteObject(desertRef);
+    onClose();
   };
 
   return (
     <Container maxWidth="xs">
-      <Dialog open onClose={onClose}>
+      <Dialog open={onOpen}
+              onClose={onClose}>
         <DialogTitle style={{cursor: "pointer"}} id="draggable-dialog-title">
           Are You Sure ?
         </DialogTitle>

@@ -9,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import {categoriesList} from "../../utilites/categories";
 import FormControl from "@mui/material/FormControl";
 import {Button} from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 const style = {
   position: 'absolute',
@@ -24,42 +25,18 @@ const style = {
 
 const AddItems = () => {
   const [file, setFile] = useState("");
-  const [imageRef, setImageRef] = useState('');
   const [categories, setCategories] = useState("");
-  const [allBrands, setAllBrands] = useState([])
   const [open, setOpen] = useState(false);
   const [openCategories, setOpenCategories] = useState(false);
   const [brandName, setBrandName] = useState("");
   const [brandList, setBrandList] = useState([]);
-  // const [addItems, setAddItems] = useState('')
   const [itemName, setItemName] = useState('')
   const [itemPrice, setItemPrice] = useState(0)
   const [textarea, setTextarea] = useState('')
   const [per, setPer] = useState(null);
+  const [imageRef, setImageRef] = useState('');
+  const [imageName, setImageName] = useState('');
 
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-
-  useEffect(() => {
-    const getBrands = async () => {
-      const querySnapshot = await getDocs(collection(db, "brands"));
-      querySnapshot.forEach((doc) => {
-        let newBrandList = []
-        querySnapshot.docs.forEach((doc) => {
-          newBrandList.push({id: doc.id, ...doc.data()})
-        })
-
-        setAllBrands(newBrandList)
-        // doc.data() is never undefined for query doc snapshots
-        // console.log(doc.id, " => ", doc.data());
-      });
-    }
-    return () => {
-      getBrands()
-    }
-  }, [])
 
   useEffect(() => {
     const allBrandList = async () => await onSnapshot(collection(db, "brands"), (brands) => {
@@ -86,57 +63,60 @@ const AddItems = () => {
     setFile('')
   }
 
-  const uploadFile = () => {
-    setOpenModal(true)
-    // const name = new Date().getTime() + file.name;
-    const storageRef = ref(storage, file.name);
-    const uploadTask = uploadBytesResumable(storageRef, file);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        setPer(progress);
+  useEffect(() => {
+    const uploadFile = () => {
+      const name = new Date().getTime() + file.name;
+      setImageName(name);
+      const storageRef = ref(storage, `${categories} / ${name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-            break;
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // console.log("Upload is " + progress + "% done");
+          setPer(progress);
+
+          switch (snapshot.state) {
+            case "paused":
+              // console.log("Upload is paused");
+              break;
+            case "running":
+              // console.log("Upload is running");
+              break;
+            default:
+              break;
+          }
+        },
+        (error) => {
+          console.log('Upload image error - ', error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setImageRef(downloadURL);
+            // console.log('File available at', downloadURL);
+
+          });
         }
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setImageRef(downloadURL);
-          setOpenModal(false)
-          console.log('File available at', downloadURL);
+      );
+    };
+    file && uploadFile()
+  }, [file])
 
-        });
-      }
-    );
-  };
 
   const handleAdd = async (e) => {
     e.preventDefault();
-    await uploadFile();
+
     try {
-
-
       await addDoc(collection(db, "items"), {
         name: itemName,
         price: itemPrice,
         description: textarea,
         brandName: brandName,
         image: imageRef,
+        imageName: imageName,
         categories: categories
 
       });
@@ -147,7 +127,8 @@ const AddItems = () => {
       setBrandName('');
       setFile('');
       setImageRef('');
-      setCategories('')
+      setCategories('');
+      setImageName('')
 
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -160,11 +141,25 @@ const AddItems = () => {
       <div>
         <form>
           <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center'}}>
-            <input type="text" placeholder='Item Name' value={itemName} onChange={(e) => setItemName(e.target.value)}/>
-            <input type="number" placeholder='Price' value={itemPrice} onChange={(e) => setItemPrice(e.target.value)}/>
+            <TextField
+              required
+              id="outlined-basic"
+              label="Item name"
+              variant="outlined"
+              value={itemName}
+              onChange={(e) => setItemName(e.target.value)}
+            />
+            <TextField
+              required
+              type='number'
+              id="outlined-basic1"
+              label="Price"
+              variant="outlined"
+              value={itemPrice}
+              onChange={(e) => setItemPrice(e.target.value)}
+            />
             <div style={{
               width: '150px',
-              marginTop: '20px'
             }}>
               <FormControl fullWidth>
                 <InputLabel id="demo-controlled-open-select-label">
@@ -233,51 +228,13 @@ const AddItems = () => {
                 alt=""
               />
             </div>
-
             <input type="file" onChange={(e) => setFile(e.target.files[0])}/>
-            <Button variant={'contained'} onClick={uploadFile}>Add image</Button>
             <Button variant={'contained'} onClick={handleClear}>Clear image</Button>
-
           </div>
-
           <Button variant={'contained'} onClick={handleAdd}>Add Item</Button>
-
-
         </form>
       </div>
-      {/*{openModal && (*/}
-      {/*  <div>*/}
 
-      {/*    <Modal*/}
-      {/*      open={openModal}*/}
-      {/*      onClose={handleClose}*/}
-      {/*      aria-labelledby="modal-modal-title"*/}
-      {/*      aria-describedby="modal-modal-description"*/}
-      {/*    >*/}
-      {/*      <Box sx={style}>*/}
-      {/*        <Box sx={{position: 'relative', display: 'inline-flex'}}>*/}
-      {/*          <CircularProgress variant="determinate"/>*/}
-      {/*          <Box*/}
-      {/*            sx={{*/}
-      {/*              top: 0,*/}
-      {/*              left: 0,*/}
-      {/*              bottom: 0,*/}
-      {/*              right: 0,*/}
-      {/*              position: 'absolute',*/}
-      {/*              display: 'flex',*/}
-      {/*              alignItems: 'center',*/}
-      {/*              justifyContent: 'center',*/}
-      {/*            }}*/}
-      {/*          >*/}
-      {/*            <Typography variant="caption" component="div" color="text.secondary">*/}
-      {/*              {`${per} %`}*/}
-      {/*            </Typography>*/}
-      {/*          </Box>*/}
-      {/*        </Box>*/}
-      {/*      </Box>*/}
-      {/*    </Modal>*/}
-      {/*  </div>*/}
-      {/*)}*/}
     </div>
 
 
