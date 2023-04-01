@@ -14,7 +14,7 @@ import {Link, NavLink, useNavigate} from "react-router-dom";
 //import logo from "./logo.png";
 import {Button} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {removeUser, selectUserCart, selectUserId} from "../store/slices/userSlices";
+import {removeUser, selectUserCart, selectUserId, setCategoriesName} from "../store/slices/userSlices";
 import {signOut} from "firebase/auth";
 import {makeStyles} from "@mui/styles";
 import Container from "@mui/material/Container";
@@ -88,8 +88,8 @@ export default function Navbar() {
     navigate("/cart");
   };
 
-  const onAddPageName = (name) => {
-    // setGetCatName(name);
+  const onAddPageName = (categoriesName) => {
+    dispatch(setCategoriesName({name: categoriesName}))
   };
 
   return (
@@ -184,7 +184,7 @@ export default function Navbar() {
                     className={({isActive}) =>
                       isActive ? "link_active" : "link"
                     }
-                    onClick={() => onAddPageName(page.link)}
+                    onClick={() => onAddPageName(page.name)}
                   >
                     {page.name}
                   </NavLink>

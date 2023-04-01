@@ -25,7 +25,7 @@ const EditItemDialog = ({item, onClose}) => {
 
   const [price, setPrice] = useState(item.price);
   const [description, setDescription] = useState(item.description);
-  const [itemName, setItemName] = useState(item.itemName);
+  const [itemName, setItemName] = useState(item.name);
   const [openD, setOpenD] = useState(false);
 
   const handleCloseD = () => {
@@ -40,36 +40,15 @@ const EditItemDialog = ({item, onClose}) => {
     setCategories(e.target.value);
   };
 
-  const addProduct = useCallback(async () => {
-    // try {
-    //   const products = await getDocs(collection(db, "items"));
-    //   const productArray = [];
-    //   products.forEach((doc) => {
-    //     const obj = {
-    //       ...doc.data(),
-    //       id: doc.id,
-    //       cart: false,
-    //       ref: doc.ref,
-    //     };
-    //     productArray.push(obj);
-    //   });
-    //   // setProducts(productArray);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  }, []);
 
   const onEditItems = async (id) => {
     const docRef = doc(db, "items", id);
-
-    const payload = {
+    await updateDoc(docRef, {
       price,
       description,
-      itemName,
+      name: itemName,
       categories,
-    };
-    await updateDoc(docRef, payload);
-    addProduct();
+    })
     onClose();
   };
 
@@ -79,14 +58,14 @@ const EditItemDialog = ({item, onClose}) => {
         open
         onClose={onClose}
         style={{
-          borderRadius: 15,
+          // borderRadius: '15px',
         }}
       >
         <div
           style={{
             width: 600,
             height: 500,
-            border: "1px solod #000",
+            // border: "1px solid #000",
             display: "flex",
             justifyContent: "space-around",
             alignItems: "center",
@@ -142,7 +121,7 @@ const EditItemDialog = ({item, onClose}) => {
             maxRows={1}
             aria-label="maximum height"
             placeholder="Enter Desctiption"
-            defaultValue={description}
+            // defaultValue={description}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             style={{

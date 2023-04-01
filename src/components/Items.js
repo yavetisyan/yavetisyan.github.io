@@ -88,7 +88,7 @@ const Items = ({items, referance}) => {
         <CardMedia
           component="img"
           alt="Pic"
-          image={items.ProductImage}
+          image={items.image}
           onClick={() => onAddproducts(items)}
           className={classes.cardMedia}
           sx={{height: 200, objectFit: "fill", width: "200px"}}

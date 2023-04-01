@@ -1,1 +1,1 @@
-export const selectUserId = state => state.uid
+export const Id = state => state.uid

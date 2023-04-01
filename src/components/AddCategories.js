@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Pagination from "@mui/material/Pagination";
 import {Container} from "@mui/material";
 import Items from "./Items";
 import {makeStyles} from "@mui/styles";
+import {collection, getDocs, query, where} from "firebase/firestore";
+import {db} from "../firebase";
 
 const useStyle = makeStyles({
   categoriesBox: {
@@ -18,29 +20,47 @@ const useStyle = makeStyles({
   },
 });
 
-const AddCategories = () => {
+const AddCategories = ({categoriesName}) => {
   const classes = useStyle();
-  const [filteredItems, setFilteredItems] = useState([]);
-
-
   const itemsPage = 8;
   const [page, setPage] = useState(1);
-  const numOfPages = Math.ceil(filteredItems.length / itemsPage);
+  const [items, setItems] = useState([]);
+
+  const numOfPages = Math.ceil(items.length / itemsPage);
   const handleChange = (event, value) => {
     setPage(value);
   };
 
+  useEffect(() => {
+    const getAccessories = async () => {
+      try {
+        const q = query(collection(db, "items"), where("categories", "==", categoriesName));
+        const querySnapshot = await getDocs(q);
+        let newItems = [];
+        querySnapshot.forEach((doc) => {
+          newItems.push({id: doc.id, ...doc.data()})
+          setItems(newItems)
+        });
+      } catch (e) {
+        console.log('categories error - ', e.message)
+      }
+    }
+
+    getAccessories()
+    return () => {
+      getAccessories()
+    }
+  }, [categoriesName])
+
+
   return (
     <Container maxWidth="lg">
-      <h1 className="toysText">For -direc name-</h1>
+      <h1 className="toysText">For {categoriesName}</h1>
       <div className={classes.categoriesBox}>
-        {filteredItems
-          .slice((page - 1) * itemsPage, page * itemsPage)
-          .map((item) => (
-            <div key={item.id}>
-              <Items items={item} referance={item.ref} key={item.id}/>
-            </div>
-          ))}
+
+        {items.map((item) => (
+          <Items items={item} referance={item.ref} key={item.id}/>
+        ))}
       </div>
 
       <div>
