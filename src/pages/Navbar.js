@@ -20,7 +20,7 @@ import {makeStyles} from "@mui/styles";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import {auth} from "../firebase";
-import {pages} from "../utilites/navbarNames";
+import {adminPages, pages} from "../utilites/navbarNames";
 
 const useStyles = makeStyles({
   button: {
@@ -170,27 +170,51 @@ export default function Navbar() {
             sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}
             className="navMenu"
           >
-            {pages.map((page) => (
-              <div key={page.link}>
-                <Button
-                  onClick={handleCloseNavMenu}
-                  sx={{
-                    my: 2,
-                  }}
-                  className={classes.button}
-                >
-                  <NavLink
-                    to={page.link}
-                    className={({isActive}) =>
-                      isActive ? "link_active" : "link"
-                    }
-                    onClick={() => onAddPageName(page.name)}
+            {userId === process.env.REACT_APP_ADMIN_ID ?
+              adminPages.map((page) => (
+                <div key={page.link}>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                      my: 2,
+                    }}
+                    className={classes.button}
                   >
-                    {page.name}
-                  </NavLink>
-                </Button>
-              </div>
-            ))}
+                    <NavLink
+                      to={page.link}
+                      className={({isActive}) =>
+                        isActive ? "link_active" : "link"
+                      }
+                      onClick={() => onAddPageName(page.name)}
+                    >
+                      {page.name}
+                    </NavLink>
+                  </Button>
+                </div>
+              ))
+              :
+              (pages.map((page) => (
+                <div key={page.link}>
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                      my: 2,
+                    }}
+                    className={classes.button}
+                  >
+                    <NavLink
+                      to={page.link}
+                      className={({isActive}) =>
+                        isActive ? "link_active" : "link"
+                      }
+                      onClick={() => onAddPageName(page.name)}
+                    >
+                      {page.name}
+                    </NavLink>
+                  </Button>
+                </div>
+              )))
+            }
           </Box>
 
           {/*ShoppingCartIcon*/}

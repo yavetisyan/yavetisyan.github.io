@@ -30,8 +30,8 @@ const userSlice = createSlice({
       state.email = null;
       state.uid = null;
       state.cart = null;
-      state.isAuth = false
-      state.toke = null
+      state.isAuth = false;
+      state.toke = null;
     },
     setCategoriesName(state, action) {
       state.name = action.payload?.name

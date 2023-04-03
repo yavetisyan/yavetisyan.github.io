@@ -2,8 +2,8 @@
 import React from "react";
 import "./App.css";
 import {Route, Routes} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {removeUser, setUser} from "./store/slices/userSlices";
+import {useDispatch, useSelector} from "react-redux";
+import {removeUser, selectUserId, setUser} from "./store/slices/userSlices";
 import Home from "./pages/Home";
 import Main from "./pages/Main";
 import ContactUs from "./pages/ContactUs";
@@ -26,7 +26,7 @@ import AllItems from "./pages/admin/AllItems";
 
 function App() {
   const dispatch = useDispatch()
-
+  const userId = useSelector(selectUserId)
   onAuthStateChanged(auth, (user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
@@ -47,7 +47,6 @@ function App() {
       dispatch(removeUser())
     }
   });
-
   return (
     <Routes>
       <Route path='/' element={<Main/>}>
@@ -59,12 +58,19 @@ function App() {
         <Route path="/accessories" element={<ForAccessories/>}/>`
         <Route path="/contactus" element={<ContactUs/>}/>
         {/*{userId === "1Hxk22s9WCc0MSOmbOqI3lPYKzE2" && (*/}
-        <Route path="/admin" element={<Admin/>}>
-          <Route index element={<Users/>}/>
-          <Route path='/admin//add-brands' element={<AddBrand/>}/>
-          <Route path='/admin/add-items' element={<AddItems/>}/>
-          <Route path='/admin/all-items' element={<AllItems/>}/>
-        </Route>
+        {userId === process.env.REACT_APP_ADMIN_ID ? (
+            // take loading
+            <Route path="/admin" element={<Admin/>}>
+              <Route index element={<Users/>}/>
+              <Route path='/admin//add-brands' element={<AddBrand/>}/>
+              <Route path='/admin/add-items' element={<AddItems/>}/>
+              <Route path='/admin/all-items' element={<AllItems/>}/>
+            </Route>
+          ) :
+          (
+            null
+          )
+        }
         {/*)}*/}
         {/*{userId && <Route path="/Cart" element={<Cart/>}/>}*/}
         <Route path="/cart" element={<Cart/>}/>
