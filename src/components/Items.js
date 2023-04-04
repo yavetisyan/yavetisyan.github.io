@@ -54,7 +54,8 @@ const Items = ({items, referance}) => {
     // setItemDescr(item.description);
     // setItemImage(item.ProductImage);
     // setProdItem(item);
-    navigate(`/products/${item.itemName}`);
+    console.log(item)
+    navigate(`/products/${item.id}`);
   };
 
   const sighnIntoAdd = () => {
@@ -142,6 +143,7 @@ const Items = ({items, referance}) => {
         </CardActions>
       </Card>
     </div>
+
   );
 };
 

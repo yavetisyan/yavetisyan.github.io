@@ -9,7 +9,6 @@ import Main from "./pages/Main";
 import ContactUs from "./pages/ContactUs";
 import Cart from "./components/Cart";
 import NotfundPage from "./components/NotfundPage";
-import {ProductionQuantityLimitsSharp} from "@mui/icons-material";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth} from "./firebase";
 import SignIn from "./pages/auth/SignIn";
@@ -22,6 +21,7 @@ import Users from "./pages/admin/Users";
 import AddBrand from "./pages/admin/AddBrand";
 import AddItems from "./pages/admin/AddItems";
 import AllItems from "./pages/admin/AllItems";
+import Product from "./components/Product";
 
 
 function App() {
@@ -68,15 +68,12 @@ function App() {
             </Route>
           ) :
           (
-            null
+            <Route path="*" element={<NotfundPage/>}/>
           )
         }
-        {/*)}*/}
-        {/*{userId && <Route path="/Cart" element={<Cart/>}/>}*/}
         <Route path="/cart" element={<Cart/>}/>
-        {/*<Route index path="/users" element={<Users/>}/>}*/}
         <Route path="*" element={<NotfundPage/>}/>
-        <Route path={`products/:itemName`} element={<ProductionQuantityLimitsSharp/>}/>
+        <Route path={`products/:itemName`} element={<Product/>}/>
       </Route>
     </Routes>
 
