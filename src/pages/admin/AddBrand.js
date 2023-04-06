@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Box, TextField} from "@mui/material";
+import {Box, CircularProgress, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import {makeStyles} from "@mui/styles";
 import {doc, setDoc} from "firebase/firestore";
@@ -42,23 +42,38 @@ function AddBrand() {
 
   };
 
-  useEffect(() => {
-    const getItems = onSnapshot(
-      collection(db, 'brands'),
-      (snapshot) => {
-        let items = [];
-        snapshot.docs.forEach((doc) => {
-          items.push({id: doc.id, ...doc.data()})
-        });
-        setAllBrands(items)
-      },
-      (error) => {
-        console.log('All items - ', error.message)
-      }
-    );
+  // useEffect(() => {
+  //   const getItems = onSnapshot(
+  //     collection(db, 'brands'),
+  //     (snapshot) => {
+  //       let items = [];
+  //       snapshot.docs.forEach((doc) => {
+  //         items.push({id: doc.id, ...doc.data()})
+  //       });
+  //       setAllBrands(items)
+  //     },
+  //     (error) => {
+  //       console.log('All items - ', error.message)
+  //     }
+  //   );
+  //
+  //   return () => {
+  //     getItems()
+  //   }
+  // }, [])
 
+  useEffect(() => {
+    const getBrands = onSnapshot(collection(db, 'brands'),
+       (snapshot) => {
+         let newBrand = [];
+         snapshot.forEach((item) => {
+           newBrand.push({id: item.id, ...item.data()})
+         })
+         setAllBrands(newBrand)
+       }
+    )
     return () => {
-      getItems()
+      getBrands()
     }
   }, [])
   const onEditRow = (id) => {
@@ -73,89 +88,101 @@ function AddBrand() {
   };
 
   return (
-    <Box
-      sx={{
-        "& .MuiTextField-root": {m: 1, width: "25ch"},
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <form
-        onSubmit={onAddBrand}
-        className={classes.brandBox}
-      >
-        <TextField
-          required
-          id="filled-required"
-          label="Brand name"
-          placeholder="Brand name"
-          variant="filled"
-          autoComplete="off"
-          value={brandName}
-          onChange={(e) => setBrandName(e.target.value)}
-        />
-        <Button
-          type='submit'
-          variant="contained"
-          disableElevation
-          style={{marginLeft: 50}}
-        >
-          Add brand name
-        </Button>
-      </form>
+     <Box
+        sx={{
+          "& .MuiTextField-root": {m: 1, width: "25ch"},
+        }}
+        noValidate
+        autoComplete="off"
+     >
+       <form
+          onSubmit={onAddBrand}
+          className={classes.brandBox}
+       >
+         <TextField
+            required
+            id="filled-required"
+            label="Brand name"
+            placeholder="Brand name"
+            variant="filled"
+            autoComplete="off"
+            value={brandName}
+            onChange={(e) => setBrandName(e.target.value)}
+         />
+         <Button
+            type='submit'
+            variant="contained"
+            disableElevation
+            style={{marginLeft: 50}}
+         >
+           Add brand name
+         </Button>
+       </form>
 
-      <div>
-        <h2>All Brands</h2>
-        <div style={{height: 400, backgroundColor: '#fff', margin: "20px"}}>
-          <DataGrid
-            onGridStateChange={console.log}
-            sx={{padding: '10px 30px'}}
-            columns={[
-              {field: "name", headerName: "Brand Name", width: 150,},
-              {
-                field: "Edit",
-                width: 100,
-                headerName: "Edit",
+       <div>
+         <h2>All Brands</h2>
+         <div style={{height: 400, backgroundColor: '#fff', margin: "20px", display: 'flex', justifyContent: 'center'}}>
+           {allbrands.length ? (
+              <DataGrid
+                 onGridStateChange={console.log}
+                 sx={{padding: '10px 30px'}}
+                 columns={[
+                   {field: "name", headerName: "Brand Name", width: 150,},
+                   {
+                     field: "Edit",
+                     width: 100,
+                     headerName: "Edit",
 
-                renderCell: (params) => {
-                  return [
-                    <Button key={params.id} onClick={() => onEditRow(params.row)}>Edit</Button>,
-                  ];
-                },
-              },
-              {
-                field: "Delete",
-                width: 100,
-                headerName: "Delete",
+                     renderCell: (params) => {
+                       return [
+                         <Button key={params.id} onClick={() => onEditRow(params.row)}>Edit</Button>,
+                       ];
+                     },
+                   },
+                   {
+                     field: "Delete",
+                     width: 100,
+                     headerName: "Delete",
 
-                renderCell: (params) => {
-                  return [
-                    <Button onClick={() => onDelete(params.row)}>Delete</Button>,
-                  ];
-                },
-              },
-            ]}
+                     renderCell: (params) => {
+                       return [
+                         <Button onClick={() => onDelete(params.row)}>Delete</Button>,
+                       ];
+                     },
+                   },
+                 ]}
 
-            rows={allbrands.map(
-              ({
-                 id,
-                 name,
+                 rows={allbrands.map(
+                    ({
+                       id,
+                       name,
 
-               }) => ({
-                id,
-                formId: formId++,
-                name,
-              })
-            )}
-          />
+                     }) => ({
+                      id,
+                      formId: formId++,
+                      name,
+                    })
+                 )}
+              />
 
-        </div>
+           ) : (
+              <Box>
+                <CircularProgress style={{
+                  display: 'flex',
+                  height: '100%',
+                }}/>
+              </Box>
+           )
+           }
 
-        {editingRow && <EditBrandItem item={editingRow} onClose={() => setEditingRow(null)}/>}
-        {deleteRow &&
-          <DeleteBrandItem item={deleteRow} onClose={() => setDeleteRow(null)} onOpen={() => setOpenDialog(true)}/>}
-      </div>
-    </Box>
+         </div>
+
+         {editingRow && <EditBrandItem item={editingRow} onClose={() => setEditingRow(null)}/>}
+         {deleteRow &&
+            <DeleteBrandItem item={deleteRow} onClose={() => setDeleteRow(null)}
+                             onOpen={() => setOpenDialog(true)}/>}
+       </div>
+     </Box>
   );
 }
 

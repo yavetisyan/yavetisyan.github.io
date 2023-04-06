@@ -1,10 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, Card, CardActions, CardContent, CardMedia, Typography,} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {db} from "../firebase";
 import {arrayUnion, collection, getDocs, query, updateDoc, where,} from "@firebase/firestore";
 import {useDispatch, useSelector} from "react-redux";
-import {selectUserId, setUserCart} from "store/slices/userSlices";
+import {selectUserId, selectUserProduct, setUserCart, setUserProduct} from "store/slices/userSlices";
 import {makeStyles} from "@mui/styles";
 
 const useStyle = makeStyles({
@@ -42,20 +42,22 @@ const useStyle = makeStyles({
 
 const Items = ({items, referance}) => {
   const classes = useStyle();
-  const userId = useSelector(selectUserId);
-
-  // const {setItemPrice, setItemDescr, setItemImage, setProdItem} =
-  //   useContext(ProductsContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [checkItem, setCheckItem] = useState(false);
+  const [product, setProduct] = useState({});
+  const userId = useSelector(selectUserId);
+
+  const asd = useSelector(selectUserProduct);
+
 
   const onAddproducts = (item) => {
-    // setItemPrice(item.price);
-    // setItemDescr(item.description);
-    // setItemImage(item.ProductImage);
-    // setProdItem(item);
-    console.log(item)
-    navigate(`/products/${item.id}`);
+    setProduct(item);
+    dispatch(setUserProduct(product))
+    // setCheckItem(true);
+    // navigate(`/product/${item.id}`);
+    console.log(asd)
+    
   };
 
   const sighnIntoAdd = () => {
@@ -75,74 +77,75 @@ const Items = ({items, referance}) => {
 
     if (newData.docs[0]) {
       dispatch(
-        setUserCart({
-          ...newData.docs[0].data(),
-          id: newData.docs[0].data(0).uid,
-        })
+         setUserCart({
+           ...newData.docs[0].data(),
+           id: newData.docs[0].data(0).uid,
+         })
       );
     }
   };
 
   return (
-    <div>
-      <Card className={classes.card} style={{transition: "all .3s"}}>
-        <CardMedia
-          component="img"
-          alt="Pic"
-          image={items.image}
-          onClick={() => onAddproducts(items)}
-          className={classes.cardMedia}
-          sx={{height: 200, objectFit: "fill", width: "200px"}}
-        />
-        <CardContent sx={{p: 0, textAlign: "center"}}>
-          <Typography gutterBottom variant="p" component="div">
-            {items.itemName}
-          </Typography>
-        </CardContent>
-        <CardContent sx={{p: 0}}>
-          <Typography gutterBottom variant="h5" component="div">
-            {items.price} AMD
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.cardAction}>
-          {userId ? (
-            <Button
-              onClick={() => onAddItem(referance)}
-              sx={{
-                border: "none",
-                backgroundColor: "#d32f2f",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "10px",
-                fontWeight: " bold",
-                ":hover": {
-                  backgroundColor: "#5a1212",
-                },
-              }}
-            >
-              Add to cart
-            </Button>
-          ) : (
-            <Button
-              sx={{
-                border: "none",
-                backgroundColor: "#d32f2f",
-                color: "#fff",
-                cursor: "pointer",
-                borderRadius: "10px",
-                fontWeight: " bold",
-                ":hover": {
-                  backgroundColor: "#5a1212",
-                },
-              }}
-              onClick={() => sighnIntoAdd()}
-            >
-              Add to cart
-            </Button>
-          )}
-        </CardActions>
-      </Card>
-    </div>
+     <div>
+       <Card className={classes.card} style={{transition: "all .3s"}}>
+         <CardMedia
+            component="img"
+            alt="Pic"
+            image={items.image}
+            onClick={() => onAddproducts(items)}
+            className={classes.cardMedia}
+            sx={{height: 200, objectFit: "fill", width: "200px"}}
+         />
+         <CardContent sx={{p: 0, textAlign: "center"}}>
+           <Typography gutterBottom variant="p" component="div">
+             {items.itemName}
+           </Typography>
+         </CardContent>
+         <CardContent sx={{p: 0}}>
+           <Typography gutterBottom variant="h5" component="div">
+             {items.price} AMD
+           </Typography>
+         </CardContent>
+         <CardActions className={classes.cardAction}>
+           {userId ? (
+              <Button
+                 onClick={() => onAddItem(referance)}
+                 sx={{
+                   border: "none",
+                   backgroundColor: "#d32f2f",
+                   color: "#fff",
+                   cursor: "pointer",
+                   borderRadius: "10px",
+                   fontWeight: " bold",
+                   ":hover": {
+                     backgroundColor: "#5a1212",
+                   },
+                 }}
+              >
+                Add to cart
+              </Button>
+           ) : (
+              <Button
+                 sx={{
+                   border: "none",
+                   backgroundColor: "#d32f2f",
+                   color: "#fff",
+                   cursor: "pointer",
+                   borderRadius: "10px",
+                   fontWeight: " bold",
+                   ":hover": {
+                     backgroundColor: "#5a1212",
+                   },
+                 }}
+                 onClick={() => sighnIntoAdd()}
+              >
+                Add to cart
+              </Button>
+           )}
+         </CardActions>
+       </Card>
+
+     </div>
 
   );
 };

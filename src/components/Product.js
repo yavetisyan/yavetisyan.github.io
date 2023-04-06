@@ -2,7 +2,12 @@ import React, {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {makeStyles} from "@mui/styles";
 import {useSelector} from "react-redux";
-import {selectUserId} from "store/slices/userSlices";
+import {selectUserId, selectUserProduct} from "store/slices/userSlices";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import {Button} from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ScrollToTop from "./ScrollToTop";
 
 const useStyle = makeStyles({
   top: {
@@ -49,15 +54,14 @@ const useStyle = makeStyles({
 });
 
 function Product() {
-  // const dispatch = useDispatch();
-  // const {prodItem} = useContext(ProductsContext);
   const classes = useStyle();
+  const item = useSelector(selectUserProduct);
   const userId = useSelector(selectUserId);
   const navigate = useNavigate();
-  const {itemName} = useParams();
-  // const {itemPrice, itemDescription, itemImage} = useContext(ProductsContext);
+  const {itemId} = useParams();
   const [added, setAdded] = useState(true);
 
+  console.log(item)
   const onAddItem = async (itemRef) => {
     // const userRef = db.collection("users").doc(userId);
     //
@@ -86,66 +90,70 @@ function Product() {
   const sighnIntoAdd = () => {
     navigate("/sign-in");
   };
+
+  console.log(item)
   return (
-    <div className="sectionContainer productTitle ">
+     <div className="sectionContainer productTitle ">
+       <Container maxWidth="lg">
+         {/*{prodItem ? (*/}
+         <Grid container spacing={5} className={classes.top}>
+           <Grid item md={5}>
+             <img
+                src={item.image}
+                alt={item.imageName}
+             />
+           </Grid>
+           <Grid item md={7}>
+             <h1>{item.name}</h1>
+             <h2 className={classes.price}>{item.price} AMD</h2>
 
+             {/*{userId ? (*/}
+             {/*   added ? (*/}
+             <>
+               <Button
+                  variant="contained"
+                  // onClick={() => onAddItem(prodItem.ref)}
+                  className={classes.btn}
+               >
+                 Add to Cart
+                 <ShoppingCartIcon className={classes.shopCart}/>
+               </Button>
+             </>
+             {/*) : (*/}
+             <>
+               <Button
+                  variant="contained"
+                  color="success"
+                  onClick={goTocart}
+                  className={classes.btn}
+               >
+                 Go to Cart
+                 <ShoppingCartIcon className={classes.shopCart}/>
+               </Button>
+             </>
+             {/*)*/}
+             {/*) : (*/}
+             {/*   <Button*/}
+             {/*      onClick={sighnIntoAdd}*/}
+             {/*      variant="contained"*/}
+             {/*      className={classes.btn}*/}
+             {/*   >*/}
+             {/*     Add to cart*/}
+             {/*     <ShoppingCartIcon className={classes.shopCart}/>*/}
+             {/*   </Button>*/}
+             {/*)*/}
+             {/*}*/}
 
-      {/*<Container maxWidth="lg">*/}
-      {/*  {prodItem ? (*/}
-      {/*    <Grid container spacing={5} className={classes.top}>*/}
-      {/*      <Grid item md={5}>*/}
-      {/*        <img src={itemImage} alt="item"/>*/}
-      {/*      </Grid>*/}
-      {/*      <Grid item md={7}>*/}
-      {/*        <h1>{itemName}</h1>*/}
-      {/*        <h2 className={classes.price}>{itemPrice} AMD</h2>*/}
-
-      {/*        {userId ? (*/}
-      {/*          added ? (*/}
-      {/*            <>*/}
-      {/*              <Button*/}
-      {/*                variant="contained"*/}
-      {/*                onClick={() => onAddItem(prodItem.ref)}*/}
-      {/*                className={classes.btn}*/}
-      {/*              >*/}
-      {/*                Add to Cart*/}
-      {/*                <ShoppingCartIcon className={classes.shopCart}/>*/}
-      {/*              </Button>*/}
-      {/*            </>*/}
-      {/*          ) : (*/}
-      {/*            <>*/}
-      {/*              <Button*/}
-      {/*                variant="contained"*/}
-      {/*                color="success"*/}
-      {/*                onClick={goTocart}*/}
-      {/*                className={classes.btn}*/}
-      {/*              >*/}
-      {/*                Go to Cart*/}
-      {/*                <ShoppingCartIcon className={classes.shopCart}/>*/}
-      {/*              </Button>*/}
-      {/*            </>*/}
-      {/*          )*/}
-      {/*        ) : (*/}
-      {/*          <Button*/}
-      {/*            onClick={sighnIntoAdd}*/}
-      {/*            variant="contained"*/}
-      {/*            className={classes.btn}*/}
-      {/*          >*/}
-      {/*            Add to cart*/}
-      {/*            <ShoppingCartIcon className={classes.shopCart}/>*/}
-      {/*          </Button>*/}
-      {/*        )}*/}
-
-      {/*        <h3 className={classes.sectrTitle}>Description</h3>*/}
-      {/*        <p className={classes.descr}>{itemDescription}</p>*/}
-      {/*      </Grid>*/}
-      {/*    </Grid>*/}
-      {/*  ) : (*/}
-      {/*    <NotfundPage/>*/}
-      {/*  )}*/}
-      {/*  <ScrollToTop/>*/}
-      {/*</Container>*/}
-    </div>
+             <h3 className={classes.sectrTitle}>Description</h3>
+             <p className={classes.descr}>{item.description}</p>
+           </Grid>
+         </Grid>
+         {/*) : (*/}
+         {/*   <NotfundPage/>*/}
+         {/*)}*/}
+         <ScrollToTop/>
+       </Container>
+     </div>
   );
 }
 

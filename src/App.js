@@ -47,35 +47,38 @@ function App() {
       dispatch(removeUser())
     }
   });
+
+
   return (
-    <Routes>
-      <Route path='/' element={<Main/>}>
-        <Route index element={<Home/>}/>
-        <Route path="/sign-in" element={<SignIn/>}/>
-        <Route path="/sign-up" element={<SignUp/>}/>
-        <Route path="/boys" element={<ForBoys/>}/>
-        <Route path="/girls" element={<ForGirls/>}/>
-        <Route path="/accessories" element={<ForAccessories/>}/>`
-        <Route path="/contactus" element={<ContactUs/>}/>
-        {/*{userId === "1Hxk22s9WCc0MSOmbOqI3lPYKzE2" && (*/}
-        {userId === process.env.REACT_APP_ADMIN_ID ? (
-            // take loading
-            <Route path="/admin" element={<Admin/>}>
-              <Route index element={<Users/>}/>
-              <Route path='/admin//add-brands' element={<AddBrand/>}/>
-              <Route path='/admin/add-items' element={<AddItems/>}/>
-              <Route path='/admin/all-items' element={<AllItems/>}/>
-            </Route>
-          ) :
-          (
-            <Route path="*" element={<NotfundPage/>}/>
-          )
-        }
-        <Route path="/cart" element={<Cart/>}/>
-        <Route path="*" element={<NotfundPage/>}/>
-        <Route path={`products/:itemName`} element={<Product/>}/>
-      </Route>
-    </Routes>
+     <Routes>
+       <Route path='/' element={<Main/>}>
+         <Route index element={<Home/>}/>
+         <Route path="/sign-in" element={<SignIn/>}/>
+         <Route path="/sign-up" element={<SignUp/>}/>
+         <Route path="/boys" element={<ForBoys/>}/>
+         <Route path="/girls" element={<ForGirls/>}/>
+         <Route path="/accessories" element={<ForAccessories/>}/>`
+         <Route path="/contactus" element={<ContactUs/>}/>
+         {/*{userId === "1Hxk22s9WCc0MSOmbOqI3lPYKzE2" && (*/}
+         {userId === process.env.REACT_APP_ADMIN_ID ? (
+               // take loading
+               <Route path="/admin" element={<Admin/>}>
+                 <Route index element={<Users/>}/>
+                 <Route path='/admin//add-brands' element={<AddBrand/>}/>
+                 <Route path='/admin/add-items' element={<AddItems/>}/>
+                 <Route path='/admin/all-items' element={<AllItems/>}/>
+               </Route>
+            ) :
+            (
+               <Route path="*" element={<NotfundPage/>}/>
+            )
+         }
+         <Route path="/cart" element={<Cart/>}/>
+         <Route path="*" element={<NotfundPage/>}/>
+         <Route path={`/product/:itemId`} element={<Product/>}/>
+         {/*<Route path={`/product/`} element={<Product/>}/>*/}
+       </Route>
+     </Routes>
 
   );
 }
