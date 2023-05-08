@@ -1,7 +1,7 @@
 import React from "react";
 import {Button, Container, Dialog, DialogActions, DialogTitle,} from "@mui/material";
-import {doc, deleteDoc} from "firebase/firestore";
-import {ref, deleteObject} from "firebase/storage";
+import {deleteDoc, doc} from "firebase/firestore";
+import {deleteObject, ref} from "firebase/storage";
 
 import {makeStyles} from "@mui/styles";
 import {db, storage} from "../firebase";
@@ -13,13 +13,13 @@ const useStyle = makeStyles({
   },
 });
 
-function DeleteItemDialog({item, onClose, onOpen}) {
+function DeleteItemDialog({item, onClose, onOpen, name}) {
   const classes = useStyle();
 
   const onDeleteItems = async (id) => {
-    const desertRef = ref(storage, `${item.categories} / ${item.imageName}`);
+    const desertRef = ref(storage, `${item.categories}/ ${item.imageName}`);
     console.log(desertRef);
-    await deleteDoc(doc(db, 'items', id));
+    await deleteDoc(doc(db, name, id));
     await deleteObject(desertRef);
     onClose();
   };

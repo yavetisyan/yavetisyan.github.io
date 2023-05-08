@@ -22,65 +22,67 @@ import AddBrand from "./pages/admin/AddBrand";
 import AddItems from "./pages/admin/AddItems";
 import AllItems from "./pages/admin/AllItems";
 import Product from "./components/Product";
+import AddImages from "./pages/admin/AddImages";
 
 
 function App() {
-  const dispatch = useDispatch()
-  const userId = useSelector(selectUserId)
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      const uid = user.uid;
+    const dispatch = useDispatch()
+    const userId = useSelector(selectUserId)
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            const uid = user.uid;
 
-      dispatch(setUser({
-        displayName: user.displayName,
-        email: user.email,
-        uid: user.uid,
-        photoURL: user.photoURL,
-        token: user.accessToken,
-      }))
-      // console.log(user)
-    } else {
-      // User is signed out
-      // ...
-      dispatch(removeUser())
-    }
-  });
+            dispatch(setUser({
+                displayName: user.displayName,
+                email: user.email,
+                uid: user.uid,
+                photoURL: user.photoURL,
+                token: user.accessToken,
+            }))
+            // console.log(user)
+        } else {
+            // User is signed out
+            // ...
+            dispatch(removeUser())
+        }
+    });
 
 
-  return (
-     <Routes>
-       <Route path='/' element={<Main/>}>
-         <Route index element={<Home/>}/>
-         <Route path="/sign-in" element={<SignIn/>}/>
-         <Route path="/sign-up" element={<SignUp/>}/>
-         <Route path="/boys" element={<ForBoys/>}/>
-         <Route path="/girls" element={<ForGirls/>}/>
-         <Route path="/accessories" element={<ForAccessories/>}/>`
-         <Route path="/contactus" element={<ContactUs/>}/>
-         {/*{userId === "1Hxk22s9WCc0MSOmbOqI3lPYKzE2" && (*/}
-         {userId === process.env.REACT_APP_ADMIN_ID ? (
-               // take loading
-               <Route path="/admin" element={<Admin/>}>
-                 <Route index element={<Users/>}/>
-                 <Route path='/admin//add-brands' element={<AddBrand/>}/>
-                 <Route path='/admin/add-items' element={<AddItems/>}/>
-                 <Route path='/admin/all-items' element={<AllItems/>}/>
-               </Route>
-            ) :
-            (
-               <Route path="*" element={<NotfundPage/>}/>
-            )
-         }
-         <Route path="/cart" element={<Cart/>}/>
-         <Route path="*" element={<NotfundPage/>}/>
-         <Route path={`/product/:itemId`} element={<Product/>}/>
-         {/*<Route path={`/product/`} element={<Product/>}/>*/}
-       </Route>
-     </Routes>
+    return (
+        <Routes>
+            <Route path='/' element={<Main/>}>
+                <Route index element={<Home/>}/>
+                <Route path="/sign-in" element={<SignIn/>}/>
+                <Route path="/sign-up" element={<SignUp/>}/>
+                <Route path="/boys" element={<ForBoys/>}/>
+                <Route path="/girls" element={<ForGirls/>}/>
+                <Route path="/accessories" element={<ForAccessories/>}/>`
+                <Route path="/contactus" element={<ContactUs/>}/>
+                {/*{userId === "1Hxk22s9WCc0MSOmbOqI3lPYKzE2" && (*/}
+                {userId === process.env.REACT_APP_ADMIN_ID ? (
+                        // take loading
+                        <Route path="/admin" element={<Admin/>}>
+                            <Route index element={<Users/>}/>
+                            <Route path='/admin/all-carousel-image' element={<AddImages/>}/>
+                            <Route path='/admin/add-brands' element={<AddBrand/>}/>
+                            <Route path='/admin/add-items' element={<AddItems/>}/>
+                            <Route path='/admin/all-items' element={<AllItems/>}/>
+                        </Route>
+                    ) :
+                    (
+                        <Route path="*" element={<NotfundPage/>}/>
+                    )
+                }
+                <Route path="/cart" element={<Cart/>}/>
+                <Route path="*" element={<NotfundPage/>}/>
+                <Route path={`/product/:itemId`} element={<Product/>}/>
+                {/*<Route path={`/product/`} element={<Product/>}/>*/}
+            </Route>
+        </Routes>
 
-  );
+    );
 }
 
 export default App;
