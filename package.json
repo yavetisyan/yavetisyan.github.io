@@ -1,7 +1,7 @@
 {
   "homepage": "https://yavetisyan.github.io",
   "name": "shop",
-  "version": "0.1.3git",
+  "version": "0.1.5",
   "private": true,
   "dependencies": {
     "@emailjs/browser": "^3.10.0",
